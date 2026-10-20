@@ -19,6 +19,13 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
+import { Route as AuthenticatedDashboardBotRouteImport } from './routes/_authenticated/dashboard.bot'
+import { Route as AuthenticatedDashboardMt5RouteImport } from './routes/_authenticated/dashboard.mt5'
+import { Route as AuthenticatedDashboardPaymentsRouteImport } from './routes/_authenticated/dashboard.payments'
+import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
+import { Route as AuthenticatedDashboardResourcesRouteImport } from './routes/_authenticated/dashboard.resources'
+import { Route as AuthenticatedDashboardSubscriptionRouteImport } from './routes/_authenticated/dashboard.subscription'
+import { Route as AuthenticatedDashboardPayPlanIdRouteImport } from './routes/_authenticated/dashboard.pay.$planId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -70,6 +77,48 @@ const AuthenticatedDashboardIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardBotRoute =
+  AuthenticatedDashboardBotRouteImport.update({
+    id: '/bot',
+    path: '/bot',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardMt5Route =
+  AuthenticatedDashboardMt5RouteImport.update({
+    id: '/mt5',
+    path: '/mt5',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardPaymentsRoute =
+  AuthenticatedDashboardPaymentsRouteImport.update({
+    id: '/payments',
+    path: '/payments',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardProfileRoute =
+  AuthenticatedDashboardProfileRouteImport.update({
+    id: '/profile',
+    path: '/profile',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardResourcesRoute =
+  AuthenticatedDashboardResourcesRouteImport.update({
+    id: '/resources',
+    path: '/resources',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardSubscriptionRoute =
+  AuthenticatedDashboardSubscriptionRouteImport.update({
+    id: '/subscription',
+    path: '/subscription',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardPayPlanIdRoute =
+  AuthenticatedDashboardPayPlanIdRouteImport.update({
+    id: '/pay/$planId',
+    path: '/pay/$planId',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -80,7 +129,14 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
+  '/dashboard/bot': typeof AuthenticatedDashboardBotRoute
+  '/dashboard/mt5': typeof AuthenticatedDashboardMt5Route
+  '/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
+  '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/dashboard/resources': typeof AuthenticatedDashboardResourcesRoute
+  '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/pay/$planId': typeof AuthenticatedDashboardPayPlanIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -90,7 +146,14 @@ export interface FileRoutesByTo {
   '/how-it-works': typeof HowItWorksRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/dashboard/bot': typeof AuthenticatedDashboardBotRoute
+  '/dashboard/mt5': typeof AuthenticatedDashboardMt5Route
+  '/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
+  '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/dashboard/resources': typeof AuthenticatedDashboardResourcesRoute
+  '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/pay/$planId': typeof AuthenticatedDashboardPayPlanIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -103,7 +166,14 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
+  '/_authenticated/dashboard/bot': typeof AuthenticatedDashboardBotRoute
+  '/_authenticated/dashboard/mt5': typeof AuthenticatedDashboardMt5Route
+  '/_authenticated/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
+  '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/_authenticated/dashboard/resources': typeof AuthenticatedDashboardResourcesRoute
+  '/_authenticated/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/_authenticated/dashboard/pay/$planId': typeof AuthenticatedDashboardPayPlanIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -116,7 +186,14 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/reset-password'
     | '/dashboard'
+    | '/dashboard/bot'
+    | '/dashboard/mt5'
+    | '/dashboard/payments'
+    | '/dashboard/profile'
+    | '/dashboard/resources'
+    | '/dashboard/subscription'
     | '/dashboard/'
+    | '/dashboard/pay/$planId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -126,7 +203,14 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/pricing'
     | '/reset-password'
+    | '/dashboard/bot'
+    | '/dashboard/mt5'
+    | '/dashboard/payments'
+    | '/dashboard/profile'
+    | '/dashboard/resources'
+    | '/dashboard/subscription'
     | '/dashboard'
+    | '/dashboard/pay/$planId'
   id:
     | '__root__'
     | '/'
@@ -138,7 +222,14 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/reset-password'
     | '/_authenticated/dashboard'
+    | '/_authenticated/dashboard/bot'
+    | '/_authenticated/dashboard/mt5'
+    | '/_authenticated/dashboard/payments'
+    | '/_authenticated/dashboard/profile'
+    | '/_authenticated/dashboard/resources'
+    | '/_authenticated/dashboard/subscription'
     | '/_authenticated/dashboard/'
+    | '/_authenticated/dashboard/pay/$planId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -224,16 +315,80 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/bot': {
+      id: '/_authenticated/dashboard/bot'
+      path: '/bot'
+      fullPath: '/dashboard/bot'
+      preLoaderRoute: typeof AuthenticatedDashboardBotRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/mt5': {
+      id: '/_authenticated/dashboard/mt5'
+      path: '/mt5'
+      fullPath: '/dashboard/mt5'
+      preLoaderRoute: typeof AuthenticatedDashboardMt5RouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/payments': {
+      id: '/_authenticated/dashboard/payments'
+      path: '/payments'
+      fullPath: '/dashboard/payments'
+      preLoaderRoute: typeof AuthenticatedDashboardPaymentsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/profile': {
+      id: '/_authenticated/dashboard/profile'
+      path: '/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof AuthenticatedDashboardProfileRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/resources': {
+      id: '/_authenticated/dashboard/resources'
+      path: '/resources'
+      fullPath: '/dashboard/resources'
+      preLoaderRoute: typeof AuthenticatedDashboardResourcesRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/subscription': {
+      id: '/_authenticated/dashboard/subscription'
+      path: '/subscription'
+      fullPath: '/dashboard/subscription'
+      preLoaderRoute: typeof AuthenticatedDashboardSubscriptionRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/pay/$planId': {
+      id: '/_authenticated/dashboard/pay/$planId'
+      path: '/pay/$planId'
+      fullPath: '/dashboard/pay/$planId'
+      preLoaderRoute: typeof AuthenticatedDashboardPayPlanIdRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
   }
 }
 
 interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardBotRoute: typeof AuthenticatedDashboardBotRoute
+  AuthenticatedDashboardMt5Route: typeof AuthenticatedDashboardMt5Route
+  AuthenticatedDashboardPaymentsRoute: typeof AuthenticatedDashboardPaymentsRoute
+  AuthenticatedDashboardProfileRoute: typeof AuthenticatedDashboardProfileRoute
+  AuthenticatedDashboardResourcesRoute: typeof AuthenticatedDashboardResourcesRoute
+  AuthenticatedDashboardSubscriptionRoute: typeof AuthenticatedDashboardSubscriptionRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+  AuthenticatedDashboardPayPlanIdRoute: typeof AuthenticatedDashboardPayPlanIdRoute
 }
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
   {
+    AuthenticatedDashboardBotRoute: AuthenticatedDashboardBotRoute,
+    AuthenticatedDashboardMt5Route: AuthenticatedDashboardMt5Route,
+    AuthenticatedDashboardPaymentsRoute: AuthenticatedDashboardPaymentsRoute,
+    AuthenticatedDashboardProfileRoute: AuthenticatedDashboardProfileRoute,
+    AuthenticatedDashboardResourcesRoute: AuthenticatedDashboardResourcesRoute,
+    AuthenticatedDashboardSubscriptionRoute:
+      AuthenticatedDashboardSubscriptionRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+    AuthenticatedDashboardPayPlanIdRoute: AuthenticatedDashboardPayPlanIdRoute,
   }
 
 const AuthenticatedDashboardRouteWithChildren =

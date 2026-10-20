@@ -14,16 +14,317 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_audit: {
+        Row: {
+          action: string
+          actor: string | null
+          created_at: string
+          details: Json | null
+          id: string
+        }
+        Insert: {
+          action: string
+          actor?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+        }
+        Update: {
+          action?: string
+          actor?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+        }
+        Relationships: []
+      }
+      payment_methods: {
+        Row: {
+          address: string | null
+          asset: string
+          enabled: boolean
+          id: string
+          instructions: string | null
+          name: string
+          network: string | null
+          network_warning: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          asset: string
+          enabled?: boolean
+          id?: string
+          instructions?: string | null
+          name: string
+          network?: string | null
+          network_warning?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          asset?: string
+          enabled?: boolean
+          id?: string
+          instructions?: string | null
+          name?: string
+          network?: string | null
+          network_warning?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          duration_days: number
+          id: string
+          method_id: string | null
+          method_name: string | null
+          notes: string | null
+          paid_at: string | null
+          plan_id: string
+          plan_name: string
+          reference: string
+          rejection_reason: string | null
+          reviewed_at: string | null
+          screenshot_path: string
+          sender: string | null
+          status: Database["public"]["Enums"]["payment_status"]
+          tx_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          duration_days: number
+          id?: string
+          method_id?: string | null
+          method_name?: string | null
+          notes?: string | null
+          paid_at?: string | null
+          plan_id: string
+          plan_name: string
+          reference?: string
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          screenshot_path: string
+          sender?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          tx_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          duration_days?: number
+          id?: string
+          method_id?: string | null
+          method_name?: string | null
+          notes?: string | null
+          paid_at?: string | null
+          plan_id?: string
+          plan_name?: string
+          reference?: string
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          screenshot_path?: string
+          sender?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          tx_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_method_id_fkey"
+            columns: ["method_id"]
+            isOneToOne: false
+            referencedRelation: "payment_methods"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plans: {
+        Row: {
+          active: boolean
+          created_at: string
+          currency: string
+          custom_quote: boolean
+          description: string | null
+          duration_days: number | null
+          featured: boolean
+          features: string[]
+          id: string
+          mt5_limit: number
+          name: string
+          price: number | null
+          sort_order: number
+          support_level: string | null
+          visible: boolean
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          currency?: string
+          custom_quote?: boolean
+          description?: string | null
+          duration_days?: number | null
+          featured?: boolean
+          features?: string[]
+          id?: string
+          mt5_limit?: number
+          name: string
+          price?: number | null
+          sort_order?: number
+          support_level?: string | null
+          visible?: boolean
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          currency?: string
+          custom_quote?: boolean
+          description?: string | null
+          duration_days?: number | null
+          featured?: boolean
+          features?: string[]
+          id?: string
+          mt5_limit?: number
+          name?: string
+          price?: number | null
+          sort_order?: number
+          support_level?: string | null
+          visible?: boolean
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          payment_id: string | null
+          plan_name: string
+          price: number | null
+          revoke_reason: string | null
+          revoked: boolean
+          starts_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          payment_id?: string | null
+          plan_name: string
+          price?: number | null
+          revoke_reason?: string | null
+          revoked?: boolean
+          starts_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          payment_id?: string | null
+          plan_name?: string
+          price?: number | null
+          revoke_reason?: string | null
+          revoked?: boolean
+          starts_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_active_subscription: { Args: { _user_id: string }; Returns: boolean }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      review_payment: {
+        Args: { _approve: boolean; _payment_id: string; _reason?: string }
+        Returns: undefined
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "customer"
+      payment_status:
+        | "draft"
+        | "pending_review"
+        | "under_verification"
+        | "approved"
+        | "rejected"
+        | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +451,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "customer"],
+      payment_status: [
+        "draft",
+        "pending_review",
+        "under_verification",
+        "approved",
+        "rejected",
+        "cancelled",
+      ],
+    },
   },
 } as const

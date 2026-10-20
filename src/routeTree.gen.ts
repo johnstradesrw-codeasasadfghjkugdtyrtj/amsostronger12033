@@ -17,6 +17,7 @@ import { Route as FeaturesRouteImport } from './routes/features'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedDashboardBotRouteImport } from './routes/_authenticated/dashboard.bot'
@@ -65,6 +66,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
@@ -128,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/how-it-works': typeof HowItWorksRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/dashboard/bot': typeof AuthenticatedDashboardBotRoute
   '/dashboard/mt5': typeof AuthenticatedDashboardMt5Route
@@ -146,6 +153,7 @@ export interface FileRoutesByTo {
   '/how-it-works': typeof HowItWorksRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/dashboard/bot': typeof AuthenticatedDashboardBotRoute
   '/dashboard/mt5': typeof AuthenticatedDashboardMt5Route
   '/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
@@ -165,6 +173,7 @@ export interface FileRoutesById {
   '/how-it-works': typeof HowItWorksRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/_authenticated/dashboard/bot': typeof AuthenticatedDashboardBotRoute
   '/_authenticated/dashboard/mt5': typeof AuthenticatedDashboardMt5Route
@@ -185,6 +194,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/pricing'
     | '/reset-password'
+    | '/admin'
     | '/dashboard'
     | '/dashboard/bot'
     | '/dashboard/mt5'
@@ -203,6 +213,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/pricing'
     | '/reset-password'
+    | '/admin'
     | '/dashboard/bot'
     | '/dashboard/mt5'
     | '/dashboard/payments'
@@ -221,6 +232,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/pricing'
     | '/reset-password'
+    | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/dashboard/bot'
     | '/_authenticated/dashboard/mt5'
@@ -300,6 +312,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
@@ -397,10 +416,12 @@ const AuthenticatedDashboardRouteWithChildren =
   )
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRouteWithChildren,
 }
 

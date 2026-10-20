@@ -72,7 +72,7 @@ function PaymentsAdmin() {
   };
   const review = async (id: string, approve: boolean) => {
     if (!approve && !reasons[id]) { toast.error("Enter a rejection reason."); return; }
-    const { error } = await supabase.rpc("review_payment", { _payment_id: id, _approve: approve, _reason: reasons[id] ?? undefined });
+    const { error } = await supabase.rpc("review_payment", { _payment_id: id, _approve: approve, _reason: reasons[id] ?? "" });
     if (error) { toast.error(error.message); return; }
     toast.success(approve ? "Approved — subscription activated" : "Rejected");
     qc.invalidateQueries();

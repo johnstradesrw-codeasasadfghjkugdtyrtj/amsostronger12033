@@ -99,7 +99,7 @@ export function PricingGrid() {
           {p.custom_quote ? (
             <Button variant="outline" className="mt-6" asChild><a href={SUPPORT_URL} target="_blank" rel="noreferrer">Talk to Us</a></Button>
           ) : (
-            <Button className="mt-6" asChild><Link to="/dashboard/plans">Subscribe Now</Link></Button>
+            <Button className="mt-6" asChild><Link to="/dashboard/pay/$planId" params={{ planId: p.id }}>Subscribe Now</Link></Button>
           )}
         </div>
       ))}

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
@@ -101,7 +101,7 @@ export function SiteFooter() {
   );
 }
 
-export function PublicLayout({ children }: { children: React.ReactNode }) {
+export function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen">
       <SiteHeader />

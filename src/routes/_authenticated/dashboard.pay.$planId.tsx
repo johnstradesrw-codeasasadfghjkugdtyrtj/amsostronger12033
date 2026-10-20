@@ -54,9 +54,9 @@ function Pay() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!method || !usable(method)) return toast.error("Choose a configured payment method.");
-    if (!file) return toast.error("Payment screenshot is required.");
-    if (!confirm) return toast.error("Please confirm your payment information.");
+    if (!method || !usable(method)) { toast.error("Choose a configured payment method."); return; }
+    if (!file) { toast.error("Payment screenshot is required."); return; }
+    if (!confirm) { toast.error("Please confirm your payment information."); return; }
     setBusy(true);
     try {
       const { data: u } = await supabase.auth.getUser();

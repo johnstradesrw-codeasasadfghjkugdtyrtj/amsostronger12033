@@ -19,7 +19,7 @@ function Profile() {
   if (!data) return null;
   const save = async () => {
     const { error } = await supabase.from("profiles").update({ full_name: name }).eq("id", data.user.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Profile saved");
     qc.invalidateQueries({ queryKey: ["account"] });
   };

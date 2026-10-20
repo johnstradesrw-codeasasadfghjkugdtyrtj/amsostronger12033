@@ -67,13 +67,13 @@ function PaymentsAdmin() {
   const [reasons, setReasons] = useState<Record<string, string>>({});
   const view = async (path: string) => {
     const { data, error } = await supabase.storage.from("payment-proofs").createSignedUrl(path, 120);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     window.open(data.signedUrl, "_blank");
   };
   const review = async (id: string, approve: boolean) => {
-    if (!approve && !reasons[id]) return toast.error("Enter a rejection reason.");
+    if (!approve && !reasons[id]) { toast.error("Enter a rejection reason."); return; }
     const { error } = await supabase.rpc("review_payment", { _payment_id: id, _approve: approve, _reason: reasons[id] ?? undefined });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(approve ? "Approved — subscription activated" : "Rejected");
     qc.invalidateQueries();
   };
@@ -116,7 +116,7 @@ function SubsAdmin() {
   const revoke = async (id: string) => {
     const reason = prompt("Reason for revoking?") ?? "";
     const { error } = await supabase.from("subscriptions").update({ revoked: true, revoke_reason: reason }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries();
   };
   return (
@@ -155,7 +155,7 @@ function PlanEditor({ plan }: { plan: Tables<"plans"> }) {
       ...rest, price: rest.price === null ? null : Number(rest.price),
       features: featuresText.split("\n").map((s) => s.trim()).filter(Boolean),
     }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Plan saved (applies to new purchases only)");
     qc.invalidateQueries({ queryKey: ["plans"] });
   };
@@ -199,7 +199,7 @@ function MethodEditor({ m, uid }: { m: Tables<"payment_methods">; uid: string })
       name: f.name, network: f.network, address: f.address || null, instructions: f.instructions,
       network_warning: f.network_warning, enabled: f.enabled, sort_order: f.sort_order, updated_at: new Date().toISOString(),
     }).eq("id", f.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     await supabase.from("admin_audit").insert({ actor: uid, action: "payment_method_update", details: { id: f.id, old_address: m.address, new_address: f.address, enabled: f.enabled } });
     toast.success("Payment method saved");
     qc.invalidateQueries();

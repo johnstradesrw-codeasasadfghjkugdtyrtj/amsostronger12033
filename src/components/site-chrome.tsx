@@ -3,7 +3,7 @@ import { useState, type ReactNode } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
-import { ACCOUNT_MGMT_URL, SUPPORT_URL, RISK_DISCLAIMER } from "@/lib/site";
+import { ACCOUNT_MGMT_URL, SUPPORT_URL } from "@/lib/site";
 
 export function Logo() {
   return (
@@ -94,7 +94,6 @@ export function SiteFooter() {
             <a href={SUPPORT_URL} target="_blank" rel="noreferrer" className="text-primary">Contact Support on Telegram</a>
           </div>
         </div>
-        <p className="text-xs leading-relaxed text-muted-foreground"><strong>Risk disclaimer:</strong> {RISK_DISCLAIMER}</p>
         <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Quantum Multi Assets Matrix · Matrix Quantum MT5 · Botorian Dev Forex</p>
       </div>
     </footer>

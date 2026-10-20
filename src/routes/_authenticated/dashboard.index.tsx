@@ -18,7 +18,7 @@ function Overview() {
       <PageHead title={`Welcome${profile?.full_name ? `, ${profile.full_name}` : ""}`} sub="Your free resources are ready. Paid features unlock after payment approval." />
       {expired && <p className="mb-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm">Your subscription has expired. Renew your plan to restore eligible access.</p>}
       {latest?.revoked && !active && <p className="mb-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm">Your subscription was revoked{latest.revoke_reason ? `: ${latest.revoke_reason}` : "."}</p>}
-      {lastPay?.status === "rejected" && <p className="mb-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm">Your last payment was rejected: {lastPay.rejection_reason}. <Link to="/pricing" className="text-primary underline">Submit a corrected payment</Link>.</p>}
+      {lastPay?.status === "rejected" && <p className="mb-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm">Your last payment was rejected: {lastPay.rejection_reason}. <Link to="/dashboard/plans" className="text-primary underline">Submit a corrected payment</Link>.</p>}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card title="Free account"><p className="font-display text-xl font-semibold">Active</p><p className="text-sm text-muted-foreground">All general resources unlocked</p></Card>
         <Card title="Paid plan">
@@ -39,7 +39,7 @@ function Overview() {
         <Card title="Quick actions">
           <div className="flex flex-wrap gap-2">
             <Button asChild size="sm"><Link to="/dashboard/resources">Open Resources</Link></Button>
-            <Button asChild size="sm" variant="outline"><Link to="/pricing">{active ? "Renew" : "View Plans"}</Link></Button>
+            <Button asChild size="sm" variant="outline"><Link to="/dashboard/plans">{active ? "Renew" : "View Plans"}</Link></Button>
             <Button asChild size="sm" variant="outline"><Link to="/dashboard/payments">Payment Status</Link></Button>
           </div>
         </Card>

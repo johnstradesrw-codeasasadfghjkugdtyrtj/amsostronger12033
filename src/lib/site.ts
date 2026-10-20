@@ -2,8 +2,6 @@ export const HERO_IMAGE = "https://i.ibb.co/DfNy0vr0/image.png";
 export const ACCOUNT_MGMT_URL = "https://t.me/qmamatrix";
 export const SUPPORT_URL = "https://t.me/fxcodding";
 export const ADMIN_EMAILS = ["dufashwenayo@gmail.com", "eclifunded@gmail.com"] as const;
-export const RISK_DISCLAIMER =
-  "Trading financial markets involves substantial risk, including the possible loss of capital. Automated trading systems do not guarantee profits and may experience losses, slippage, execution failures, or technical interruptions. Past performance is not a guarantee of future results. Users are responsible for understanding their trading risks and configuring appropriate safeguards.";
 
 export type SubLike = { expires_at: string; revoked: boolean };
 /** A subscription grants paid access only if not revoked and not yet expired. */

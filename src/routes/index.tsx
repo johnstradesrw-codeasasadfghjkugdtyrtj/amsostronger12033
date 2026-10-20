@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PublicLayout } from "@/components/site-chrome";
 import { FeatureGrid, Steps, PricingGrid, FaqList, SectionTitle } from "@/components/marketing";
@@ -10,9 +9,9 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Quantum Multi Assets Matrix — MT5 Trading Platform" },
-      { name: "description", content: "Explore the platform, access free resources, and discover tools for your MT5 trading workflow." },
+      { name: "description", content: "Explore the platform, and discover tools for your MT5 trading workflow." },
       { property: "og:title", content: "Quantum Multi Assets Matrix" },
-      { property: "og:description", content: "MT5-focused automated trading platform with free resources and subscription access." },
+      { property: "og:description", content: "MT5-focused automated trading platform with subscription access." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:image", content: HERO_IMAGE },
@@ -50,16 +49,13 @@ function Index() {
             Quantum Multi Assets Matrix
           </h1>
           <p className="mt-5 max-w-xl text-lg text-muted-foreground">
-            Explore the platform, access available resources, and discover tools designed for your MT5 trading workflow.
+            Explore the platform, and discover tools designed for your MT5 trading workflow.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button size="lg" asChild><Link to="/auth" search={{ mode: "signup" }}>Create Free Account</Link></Button>
-            <Button size="lg" variant="outline" asChild><Link to="/dashboard/resources">Explore Resources</Link></Button>
+            <Button size="lg" variant="outline" asChild><Link to="/pricing">View Plans</Link></Button>
             <Button size="lg" variant="secondary" asChild><a href={ACCOUNT_MGMT_URL} target="_blank" rel="noreferrer">Account Management — Click Here</a></Button>
           </div>
-          <p className="mt-6 flex items-start gap-2 text-xs text-muted-foreground">
-            <AlertTriangle className="h-4 w-4 shrink-0 text-destructive" /> Trading involves risk. Profits are not guaranteed.
-          </p>
         </div>
         <HeroImage />
       </section>

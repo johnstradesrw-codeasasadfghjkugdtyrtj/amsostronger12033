@@ -84,7 +84,7 @@ function Pay() {
       <Card>
         <CheckCircle2 className="h-10 w-10 text-primary" />
         <h2 className="mt-3 font-display text-2xl font-bold">Payment submitted successfully</h2>
-        <p className="mt-2 text-muted-foreground">Your payment is awaiting administrator verification. Your paid subscription features will remain locked until approval. Your free resources stay available.</p>
+        <p className="mt-2 text-muted-foreground">Your payment is awaiting administrator verification. Your paid subscription features will remain locked until approval.</p>
         <dl className="mt-4 grid grid-cols-2 gap-2 text-sm">
           <dt className="text-muted-foreground">Reference</dt><dd>{done.reference}</dd>
           <dt className="text-muted-foreground">Plan</dt><dd>{plan.name}</dd>

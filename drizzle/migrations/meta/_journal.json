@@ -8,6 +8,13 @@
       "when": 1792507702773,
       "tag": "0000_qmam_core",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792507719012,
+      "tag": "0001_proof_storage_policies",
+      "breakpoints": true
     }
   ]
 }

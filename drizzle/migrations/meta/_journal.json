@@ -15,6 +15,13 @@
       "when": 1792507719012,
       "tag": "0001_proof_storage_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792508645661,
+      "tag": "0002_no_auto_admin_with_autoconfirm",
+      "breakpoints": true
     }
   ]
 }

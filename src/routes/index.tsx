@@ -1,24 +1,29 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "QMAM — Quantum Multi-Asset Matrix | Botorian Dev Forex" },
+      { name: "description", content: "QMAM: automated trading systems (Expert Advisors) for MetaTrader 4 and MetaTrader 5." },
+      { property: "og:title", content: "QMAM — Quantum Multi-Asset Matrix" },
+      { property: "og:description", content: "Automated trading software for MT4 and MT5." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="mx-auto max-w-2xl px-6 py-20 text-foreground">
+      <h1 className="text-4xl font-bold tracking-tight">QMAM</h1>
+      <p className="mt-2 text-lg text-muted-foreground">Quantum Multi-Asset Matrix</p>
+      <p className="mt-8 leading-relaxed">
+        Quantum Multi-Asset Matrix systems generally refer to automated trading software
+        (Expert Advisors or algorithmic bots) designed for platforms like MetaTrader 4 (MT4)
+        or MetaTrader 5 (MT5).
+      </p>
+    </main>
   );
 }

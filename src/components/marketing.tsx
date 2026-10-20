@@ -19,8 +19,7 @@ export function SectionTitle({ eyebrow, title, sub }: { eyebrow: string; title: 
 
 const features = [
   { icon: Activity, t: "MT5-oriented workflow", d: "Built around MetaTrader 5 setup and operation.", pending: false },
-  { icon: Users, t: "Free account resources", d: "Guides, setup docs and support immediately after sign-up.", pending: false },
-  { icon: LayoutDashboard, t: "Client dashboard", d: "Overview, subscription, payments and profile in one place.", pending: false },
+    { icon: LayoutDashboard, t: "Client dashboard", d: "Overview, subscription, payments and profile in one place.", pending: false },
   { icon: Upload, t: "Secure payment submission", d: "Upload payment proof to private storage.", pending: false },
   { icon: BadgeCheck, t: "Payment review & approval", d: "Administrators verify every payment manually.", pending: false },
   { icon: Clock, t: "Subscription expiry tracking", d: "Countdown and automatic lock on expiry.", pending: false },
@@ -113,13 +112,12 @@ const faqs: [string, string][] = [
   ["Which payment methods are supported?", "USDT (TRC20) and Bitcoin are prepared. A method is only usable once the administrator has configured its receiving details."],
   ["Why must I upload a payment screenshot?", "It gives the administrator evidence to verify your payment manually."],
   ["How long does payment approval take?", "Approval is manual. For the current timeframe, contact support on Telegram."],
-  ["When will my dashboard unlock?", "Free resources are available immediately. Paid features unlock as soon as an administrator approves your payment."],
+  ["When will my dashboard unlock?", "Paid features unlock as soon as an administrator approves your payment."],
   ["How do I connect my MT5 account?", "Follow the Connect MT5 page in your dashboard. The live execution bridge is still being integrated."],
   ["How do I renew my subscription?", "Use the Renew button in your dashboard. Renewal time is added after your current expiry."],
-  ["What happens when my subscription expires?", "Paid features lock automatically. Your free resources stay available."],
+  ["What happens when my subscription expires?", "Paid features lock automatically."],
   ["Where can I get account-management assistance?", "Use 'Account Management — Click Here' (Telegram @qmamatrix)."],
   ["How do I contact support?", "Technical support is on Telegram at @fxcodding."],
-  ["Are trading profits guaranteed?", "No. Trading involves substantial risk and losses are possible."],
 ];
 export function FaqList() {
   return (

@@ -14,7 +14,7 @@ function Payments() {
     <div className="space-y-4">
       <PageHead title="Payment History" sub="Verification is manual and done by an administrator." />
       {data.payments.length === 0 && (
-        <Card><p className="text-sm">No payments yet.</p><Button asChild className="mt-3" size="sm"><Link to="/pricing">View Plans</Link></Button></Card>
+        <Card><p className="text-sm">No payments yet.</p><Button asChild className="mt-3" size="sm"><Link to="/dashboard/plans">View Plans</Link></Button></Card>
       )}
       {data.payments.map((p) => (
         <Card key={p.id}>

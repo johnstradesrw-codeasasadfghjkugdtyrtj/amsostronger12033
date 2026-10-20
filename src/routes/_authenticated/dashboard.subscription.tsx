@@ -18,12 +18,12 @@ function Sub() {
           <p className="text-sm text-muted-foreground">
             {new Date(data.active.starts_at).toLocaleDateString()} → {new Date(data.active.expires_at).toLocaleDateString()} · {daysRemaining(data.active.expires_at)} days left
           </p>
-          <Button asChild className="mt-4"><Link to="/pricing">Renew</Link></Button>
+          <Button asChild className="mt-4"><Link to="/dashboard/plans">Renew</Link></Button>
         </Card>
       ) : (
         <Card title="Current plan">
-          <p>You don't have a paid subscription. Your free resources are fully available.</p>
-          <Button asChild className="mt-4"><Link to="/pricing">View Subscription Plans</Link></Button>
+          <p>You don't have a paid subscription. </p>
+          <Button asChild className="mt-4"><Link to="/dashboard/plans">View Subscription Plans</Link></Button>
         </Card>
       )}
       <Card title="Subscription history">

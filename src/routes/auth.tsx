@@ -50,12 +50,13 @@ function AuthPage() {
     setBusy(true);
     try {
       if (mode === "signup") {
-        const { error } = await supabase.auth.signUp({
+        const { data: su, error } = await supabase.auth.signUp({
           email, password,
-          options: { emailRedirectTo: `${window.location.origin}/dashboard`, data: { full_name: name } },
+          options: { data: { full_name: name } },
         });
         if (error) throw error;
-        setSent("Check your email and click the confirmation link. You'll go straight to your dashboard.");
+        if (su.session) navigate({ to: "/dashboard" });
+        else setSent("Account created. Please log in.");
       } else if (mode === "login") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;

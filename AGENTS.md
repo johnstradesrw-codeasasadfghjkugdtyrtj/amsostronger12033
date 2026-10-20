@@ -10,4 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Paid access is decided only by `subscriptions` rows (not revoked, not expired) created by the `review_payment` SQL function; never grant it from the client. Why: RLS + server-side checks are the security boundary.
-- Admin role comes only from the `handle_auth_user` trigger for verified allow-listed emails; never from user-editable data. Why: prevents privilege escalation.
+- Admin role is granted only manually in user_roles (auto-confirm is on, so email ownership is unverified); never from user-editable data or signup. Why: prevents privilege escalation.

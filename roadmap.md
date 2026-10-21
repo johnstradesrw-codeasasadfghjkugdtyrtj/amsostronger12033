@@ -1,0 +1,5 @@
+- [ ] Enforce server-side subscription, suspension, approval and plan entitlements.
+- [ ] Show truthful MT5/bot locks and restore registered-user resources.
+- [ ] Repair direct routes, safe login return paths and admin deep links.
+- [ ] Apply requested cream/forest-green solid-color theme.
+- [ ] Test entitlement rules, direct access and mobile/desktop; document external deployment limitations.

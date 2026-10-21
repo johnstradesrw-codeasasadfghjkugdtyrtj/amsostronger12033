@@ -13,6 +13,8 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
+import { supabase } from '@/integrations/supabase/client';
+import { safeReturnPath } from '@/lib/navigation';
 
 function NotFoundComponent() {
   return (
@@ -75,6 +77,9 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  beforeLoad: ({ location }) => {
+    if (typeof window !== 'undefined' && /^\/(dashboard|admin|resources)(\/|$)/.test(location.pathname)) sessionStorage.setItem('auth-return', safeReturnPath(location.href));
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -114,6 +119,15 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange(event => {
+      if (!['SIGNED_IN','SIGNED_OUT','USER_UPDATED'].includes(event)) return;
+      void router.invalidate();
+      if (event !== 'SIGNED_OUT') void queryClient.invalidateQueries();
+    });
+    return () => data.subscription.unsubscribe();
+  }, [router, queryClient]);
 
   return (
     <QueryClientProvider client={queryClient}>

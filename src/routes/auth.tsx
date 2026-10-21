@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/site-chrome";
+import { safeReturnPath } from '@/lib/navigation';
 
 type Mode = "login" | "signup" | "forgot";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>): { mode?: Mode | undefined } => ({
+  validateSearch: (s: Record<string, unknown>): { mode?: Mode | undefined; redirect?: string } => ({
     mode: s["mode"] === "signup" || s["mode"] === "forgot" ? (s["mode"] as Mode) : undefined,
+    redirect: typeof s['redirect'] === 'string' ? safeReturnPath(s['redirect']) : undefined,
   }),
   head: () => ({
     meta: [
@@ -35,15 +37,16 @@ function AuthPage() {
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState<string | null>(null);
+  const goBack = () => {
+    const target = safeReturnPath(search.redirect ?? sessionStorage.getItem('auth-return'));
+    sessionStorage.removeItem('auth-return');
+    navigate({ to: target, replace: true });
+  };
 
   useEffect(() => setMode(search.mode ?? "login"), [search.mode]);
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => data.user && navigate({ to: "/dashboard" }));
-    const { data } = supabase.auth.onAuthStateChange((e) => {
-      if (e === "SIGNED_IN") navigate({ to: "/dashboard" });
-    });
-    return () => data.subscription.unsubscribe();
-  }, [navigate]);
+    supabase.auth.getUser().then(({ data }) => { if (data.user) goBack(); });
+  }, [navigate, search.redirect]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,11 +58,12 @@ function AuthPage() {
           options: { data: { full_name: name } },
         });
         if (error) throw error;
-        if (su.session) navigate({ to: "/dashboard" });
+        if (su.session) goBack();
         else setSent("Account created. Please log in.");
       } else if (mode === "login") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        goBack();
       } else {
         const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password` });
         if (error) throw error;

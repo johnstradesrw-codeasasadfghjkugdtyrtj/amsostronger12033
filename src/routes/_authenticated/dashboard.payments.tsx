@@ -1,3 +1,4 @@
+import { pageHead } from '@/lib/metadata';
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -5,7 +6,7 @@ import { PageHead, Card } from "@/components/dash-ui";
 import { useAccount, statusLabel } from "@/hooks/use-account";
 import { SUPPORT_URL } from "@/lib/site";
 
-export const Route = createFileRoute("/_authenticated/dashboard/payments")({ component: Payments });
+export const Route = createFileRoute("/_authenticated/dashboard/payments")({ head: () => pageHead('Payment history','Your payment verification and subscription history.'), component: Payments });
 
 function Payments() {
   const { data } = useAccount();
@@ -13,6 +14,7 @@ function Payments() {
   return (
     <div className="space-y-4">
       <PageHead title="Payment History" sub="Verification is manual and done by an administrator." />
+      <Button asChild variant="outline"><Link to="/dashboard/subscription">My Subscription History</Link></Button>
       {data.payments.length === 0 && (
         <Card><p className="text-sm">No payments yet.</p><Button asChild className="mt-3" size="sm"><Link to="/dashboard/plans">View Plans</Link></Button></Card>
       )}

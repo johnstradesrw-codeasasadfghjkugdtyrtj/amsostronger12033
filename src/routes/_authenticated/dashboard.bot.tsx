@@ -1,11 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHead, Card, PaidLock } from "@/components/dash-ui";
-import { useAccount } from "@/hooks/use-account";
+import { PageHead, Card } from "@/components/dash-ui";
+import { useProtectedFeature } from '@/hooks/use-entitlement';
+import { SubscriptionLock } from '@/components/subscription-lock';
+import { pageHead } from '@/lib/metadata';
 
-export const Route = createFileRoute("/_authenticated/dashboard/bot")({ component: BotPage });
+export const Route = createFileRoute("/_authenticated/dashboard/bot")({ head: () => pageHead('Bot','Plan-eligible trading bot access and integration status.'), component: BotPage });
 
 function BotPage() {
-  const { data } = useAccount();
+  const { data, isLoading, error } = useProtectedFeature('bot');
+  if (isLoading) return <p role="status">Checking subscription access…</p>;
+  if (error || !data) return <p role="alert">Unable to verify access. Please try again.</p>;
+  if (!data.allowed) return <SubscriptionLock entitlement={data.entitlement} feature="BOT" />;
   const body = (
     <div className="grid gap-4 sm:grid-cols-2">
       <Card title="Bot status"><p className="font-semibold">Not Connected</p></Card>
@@ -17,7 +22,7 @@ function BotPage() {
   return (
     <div>
       <PageHead title="Bot Dashboard" sub="No live trading activity is shown until a real MT5 integration is connected." />
-      {data?.active ? body : <PaidLock>{body}</PaidLock>}
+      {body}
     </div>
   );
 }

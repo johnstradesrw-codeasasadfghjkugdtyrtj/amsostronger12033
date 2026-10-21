@@ -1,0 +1,13 @@
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { Button } from '@/components/ui/button';
+import { Logo } from '@/components/site-chrome';
+import { pageHead } from '@/lib/metadata';
+import { SUPPORT_URL, ACCOUNT_MGMT_URL } from '@/lib/site';
+export const Route = createFileRoute('/_authenticated/resources')({ head: () => pageHead('Resources & Guides','Free educational guides and setup documentation for registered users.'), component: Resources });
+function Resources() {
+ return <main className="mx-auto max-w-4xl px-4 py-8 sm:px-8"><Logo /><div className="mt-6"><Button asChild variant="outline"><Link to="/dashboard">Back to dashboard</Link></Button></div>
+ <h1 className="mt-8 font-display text-3xl font-bold">Resources & Guides</h1>
+ <section className="mt-8 border-t border-border py-6"><h2 className="font-display text-xl font-semibold">MT5 setup checklist</h2><ol className="mt-4 list-decimal space-y-3 pl-5"><li>Install MetaTrader 5 from your broker’s official website.</li><li>Confirm your broker/server name and MT5 account identifier.</li><li>Use a demo account to review your setup before live trading.</li><li>Ask technical support for the supported execution bridge. Website connection is currently unavailable.</li><li>Never send your broker password through a website form or support message.</li></ol></section>
+ <section className="border-t border-border py-6"><h2 className="font-display text-xl font-semibold">Payment verification</h2><p className="mt-4">Choose a plan in your dashboard, pay using the configured payment address and upload your screenshot. Only administrator approval activates a subscription. Track pending or rejected payments in your payment history.</p><div className="mt-4 flex flex-wrap gap-3"><Button asChild variant="outline"><Link to="/dashboard/payments">Payment History</Link></Button><Button asChild variant="outline"><Link to="/dashboard/profile">Profile Settings</Link></Button></div></section>
+ <section className="border-t border-border py-6"><h2 className="font-display text-xl font-semibold">Documentation & assistance</h2><div className="mt-4 flex flex-wrap gap-3"><Button asChild><a href="https://www.metatrader5.com/en/terminal/help" target="_blank" rel="noreferrer">Official MT5 Documentation</a></Button><Button asChild variant="outline"><a href={SUPPORT_URL} target="_blank" rel="noreferrer">Technical Support</a></Button><Button asChild variant="outline"><a href={ACCOUNT_MGMT_URL} target="_blank" rel="noreferrer">Account Management</a></Button></div></section></main>;
+}

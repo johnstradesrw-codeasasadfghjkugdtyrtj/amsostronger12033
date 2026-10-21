@@ -1,3 +1,4 @@
+import { pageHead } from '@/lib/metadata';
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/dash-ui";
 import { validateProof } from "@/lib/site";
 
-export const Route = createFileRoute("/_authenticated/dashboard/pay/$planId")({ component: Pay });
+export const Route = createFileRoute("/_authenticated/dashboard/pay/$planId")({ head: () => pageHead('Submit payment','Submit a payment screenshot for administrator verification.'), component: Pay });
 
 function Pay() {
   const { planId } = Route.useParams();
@@ -36,7 +37,7 @@ function Pay() {
   if (isLoading) return <p className="text-muted-foreground">Loading…</p>;
   const plan = data?.plan;
   if (!plan || plan.custom_quote) return <Card><p>This plan isn't available.</p></Card>;
-  const method = data!.methods.find((m) => m.id === methodId);
+  const method = data?.methods.find((m) => m.id === methodId);
 
   const onFile = (f: File | null) => {
     if (!f) return;
@@ -52,12 +53,13 @@ function Pay() {
     setBusy(true);
     try {
       const { data: u } = await supabase.auth.getUser();
-      const uid = u.user!.id;
+      if (!u.user) throw new Error('Please sign in.');
+      const uid = u.user.id;
       const path = `${uid}/${crypto.randomUUID()}.${file.name.split(".").pop()}`;
       const up = await supabase.storage.from("payment-proofs").upload(path, file, { contentType: file.type });
       if (up.error) throw up.error;
       const { data: row, error } = await supabase.from("payments").insert({
-        user_id: uid, plan_id: plan.id, plan_name: plan.name, amount: Number(plan.price), duration_days: plan.duration_days!,
+        user_id: uid, plan_id: plan.id, plan_name: plan.name, amount: Number(plan.price), duration_days: plan.duration_days ?? 0,
         method_id: method.id, method_name: method.name, screenshot_path: path,
       }).select("reference").single();
       if (error) throw error;
@@ -89,12 +91,12 @@ function Pay() {
         <p className="font-display text-4xl font-bold">${Number(plan.price)}</p>
       </div>
 
-      {data!.methods.length === 0 ? (
+      {!data?.methods.length ? (
         <Card><p className="text-sm">Payment addresses aren't set up yet. Please contact support.</p></Card>
       ) : (
         <>
           <div className="flex gap-2 overflow-x-auto">
-            {data!.methods.map((m) => (
+            {data?.methods.map((m) => (
               <button key={m.id} onClick={() => setMethodId(m.id)}
                 className={`shrink-0 rounded-full border px-4 py-2 text-sm ${methodId === m.id ? "border-primary bg-primary/15 text-foreground" : "border-border text-muted-foreground"}`}>
                 {m.name}
@@ -103,7 +105,7 @@ function Pay() {
           </div>
           {method && (
             <Card title={`Send to (${method.network ?? method.asset})`}>
-              <button onClick={() => { navigator.clipboard.writeText(method.address!); toast.success("Address copied"); }}
+              <button onClick={() => { navigator.clipboard.writeText(method.address ?? ''); toast.success("Address copied"); }}
                 className="flex w-full items-center gap-2 rounded-lg bg-muted p-3 text-left">
                 <span className="min-w-0 flex-1 break-all font-mono text-sm">{method.address}</span>
                 <Copy className="h-4 w-4 shrink-0 text-primary" />

@@ -1,3 +1,4 @@
+import { pageHead } from '@/lib/metadata';
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -9,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { PageHead, Card } from "@/components/dash-ui";
 import { useAccount } from "@/hooks/use-account";
 
-export const Route = createFileRoute("/_authenticated/dashboard/profile")({ component: Profile });
+export const Route = createFileRoute("/_authenticated/dashboard/profile")({ head: () => pageHead('Profile','Manage your registered account profile.'), component: Profile });
 
 function Profile() {
   const { data } = useAccount();

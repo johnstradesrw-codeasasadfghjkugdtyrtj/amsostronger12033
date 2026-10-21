@@ -1,10 +1,11 @@
+import { pageHead } from '@/lib/metadata';
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, Sparkles } from "lucide-react";
 import { usePlans } from "@/components/marketing";
 import { PageHead } from "@/components/dash-ui";
 import { SUPPORT_URL } from "@/lib/site";
 
-export const Route = createFileRoute("/_authenticated/dashboard/plans")({ component: Plans });
+export const Route = createFileRoute("/_authenticated/dashboard/plans")({ head: () => pageHead('Subscription plans','Choose your subscription inside your dashboard.'), component: Plans });
 
 function Plans() {
   const { data: plans, isLoading } = usePlans();

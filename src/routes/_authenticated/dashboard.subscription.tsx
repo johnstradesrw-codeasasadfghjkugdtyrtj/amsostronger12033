@@ -1,10 +1,11 @@
+import { pageHead } from '@/lib/metadata';
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { PageHead, Card } from "@/components/dash-ui";
 import { useAccount } from "@/hooks/use-account";
 import { daysRemaining, isSubscriptionActive } from "@/lib/site";
 
-export const Route = createFileRoute("/_authenticated/dashboard/subscription")({ component: Sub });
+export const Route = createFileRoute("/_authenticated/dashboard/subscription")({ head: () => pageHead('My subscription','Your current subscription and renewal history.'), component: Sub });
 
 function Sub() {
   const { data } = useAccount();

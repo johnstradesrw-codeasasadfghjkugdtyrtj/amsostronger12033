@@ -1,10 +1,11 @@
+import { pageHead } from '@/lib/metadata';
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/dash-ui";
 import { useAccount, statusLabel } from "@/hooks/use-account";
 import { daysRemaining } from "@/lib/site";
 
-export const Route = createFileRoute("/_authenticated/dashboard/")({ component: Overview });
+export const Route = createFileRoute("/_authenticated/dashboard/")({ head: () => pageHead('Account overview','Your verified subscription and payment status.'), component: Overview });
 
 function Overview() {
   const { data, isLoading } = useAccount();
@@ -45,6 +46,7 @@ function Overview() {
         </Link>
       )}
 
+      <Button asChild variant="outline"><Link to="/dashboard/mt5">Connect MT5</Link></Button>
       <Card title="Bot"><p className="font-semibold">Not connected yet</p></Card>
     </div>
   );

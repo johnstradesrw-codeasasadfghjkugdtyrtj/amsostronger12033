@@ -1,13 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { isSubscriptionActive } from "@/lib/site";
+import { useEntitlement } from './use-entitlement';
 
 export function useAccount() {
-  return useQuery({
+  const entitlement = useEntitlement();
+  const account = useQuery({
     queryKey: ["account"],
     queryFn: async () => {
       const { data: u } = await supabase.auth.getUser();
-      const uid = u.user!.id;
+      if (!u.user) throw new Error('Please sign in.');
+      const uid = u.user.id;
       const [subs, pays, roles, prof] = await Promise.all([
         supabase.from("subscriptions").select("*").eq("user_id", uid).order("expires_at", { ascending: false }),
         supabase.from("payments").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
@@ -15,18 +17,18 @@ export function useAccount() {
         supabase.from("profiles").select("*").eq("id", uid).maybeSingle(),
       ]);
       const subscriptions = subs.data ?? [];
-      const active = subscriptions.find((s) => isSubscriptionActive(s)) ?? null;
+      for (const result of [subs, pays, roles, prof]) if (result.error) throw result.error;
       return {
-        user: u.user!,
+        user: u.user,
         profile: prof.data,
         subscriptions,
         payments: pays.data ?? [],
-        active,
         latest: subscriptions[0] ?? null,
         isAdmin: !!roles.data?.some((r) => r.role === "admin"),
       };
     },
   });
+  return { ...account, isLoading: account.isLoading || entitlement.isLoading, data: account.data ? { ...account.data, entitlement: entitlement.data, active: entitlement.data?.allowed ? account.data.subscriptions.find(s => s.id === entitlement.data?.subscription_id) ?? null : null } : undefined };
 }
 
 export const statusLabel: Record<string, string> = {

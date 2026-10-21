@@ -5,9 +5,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/site-chrome";
 import { useAccount } from "@/hooks/use-account";
 import { ACCOUNT_MGMT_URL, SUPPORT_URL } from "@/lib/site";
+import { Button } from '@/components/ui/button';
+import { pageHead } from '@/lib/metadata';
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — Quantum Multi Assets Matrix" }, { name: "robots", content: "noindex" }] }),
+  head: () => pageHead('Dashboard','Your account, subscriptions and MT5 access.'),
   component: DashboardLayout,
 });
 
@@ -44,11 +46,13 @@ function DashboardLayout() {
             </Link>
           ))}
           <Link to="/dashboard/mt5" className={linkCls} activeProps={{ className: "bg-sidebar-accent text-primary" }}><Link2 className="h-4 w-4" />Connect MT5</Link>
+          <Link to="/resources" className={linkCls}><LifeBuoy className="h-4 w-4" />Resources & Guides</Link>
+          <Link to="/dashboard/subscription" className={linkCls}><Receipt className="h-4 w-4" />My Subscription</Link>
           <a href={ACCOUNT_MGMT_URL} target="_blank" rel="noreferrer" className={linkCls}><Users className="h-4 w-4" />Account Management</a>
           <a href={SUPPORT_URL} target="_blank" rel="noreferrer" className={linkCls}><LifeBuoy className="h-4 w-4" />Support</a>
           {data?.isAdmin && <Link to="/admin" className={`${linkCls} text-accent`}><ShieldCheck className="h-4 w-4" />Admin</Link>}
         </nav>
-        <button onClick={signOut} className={linkCls}><LogOut className="h-4 w-4" />Logout</button>
+        <Button variant="ghost" onClick={signOut} className={linkCls}><LogOut className="h-4 w-4" />Logout</Button>
       </aside>
 
       <header className="sticky top-0 z-30 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border bg-background/90 px-4 py-3 backdrop-blur lg:hidden">
@@ -56,11 +60,19 @@ function DashboardLayout() {
         <div className="flex items-center gap-1">
           {data?.isAdmin && <Link to="/admin" className="rounded-full p-2 text-accent" aria-label="Admin"><ShieldCheck className="h-5 w-5" /></Link>}
           <a href={SUPPORT_URL} target="_blank" rel="noreferrer" className="rounded-full p-2 text-muted-foreground" aria-label="Support"><LifeBuoy className="h-5 w-5" /></a>
-          <button onClick={signOut} className="rounded-full p-2 text-muted-foreground" aria-label="Logout"><LogOut className="h-5 w-5" /></button>
+          <Button variant="ghost" size="icon" onClick={signOut} aria-label="Logout"><LogOut className="h-5 w-5" /></Button>
         </div>
       </header>
 
-      <main className="flex-1 p-4 pb-24 sm:p-8 lg:pb-8"><Outlet /></main>
+      <main className="min-w-0 flex-1 p-4 pb-24 sm:p-8 lg:pb-8">
+        <nav className="mb-5 flex flex-wrap gap-x-4 gap-y-2 border-b border-border pb-3 text-sm lg:hidden">
+          <Link to="/dashboard/mt5" className="font-semibold text-primary">Connect MT5</Link>
+          <Link to="/resources">Resources</Link>
+          <Link to="/dashboard/subscription">My Subscription</Link>
+          <a href={ACCOUNT_MGMT_URL} target="_blank" rel="noreferrer">Account Management</a>
+        </nav>
+        <Outlet />
+      </main>
 
       <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-border bg-sidebar/95 backdrop-blur lg:hidden">
         {items.map((i) => (

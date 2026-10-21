@@ -14,6 +14,32 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_access: {
+        Row: {
+          reason: string | null
+          suspended: boolean
+          user_id: string
+        }
+        Insert: {
+          reason?: string | null
+          suspended?: boolean
+          user_id: string
+        }
+        Update: {
+          reason?: string | null
+          suspended?: boolean
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "account_access_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       admin_audit: {
         Row: {
           action: string
@@ -236,9 +262,12 @@ export type Database = {
       subscriptions: {
         Row: {
           created_at: string
+          entitled_features: string[]
           expires_at: string
           id: string
+          mt5_limit: number
           payment_id: string | null
+          plan_id: string | null
           plan_name: string
           price: number | null
           revoke_reason: string | null
@@ -248,9 +277,12 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          entitled_features?: string[]
           expires_at: string
           id?: string
+          mt5_limit?: number
           payment_id?: string | null
+          plan_id?: string | null
           plan_name: string
           price?: number | null
           revoke_reason?: string | null
@@ -260,9 +292,12 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          entitled_features?: string[]
           expires_at?: string
           id?: string
+          mt5_limit?: number
           payment_id?: string | null
+          plan_id?: string | null
           plan_name?: string
           price?: number | null
           revoke_reason?: string | null
@@ -276,6 +311,13 @@ export type Database = {
             columns: ["payment_id"]
             isOneToOne: false
             referencedRelation: "payments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
             referencedColumns: ["id"]
           },
         ]
@@ -315,6 +357,7 @@ export type Database = {
         Args: { _approve: boolean; _payment_id: string; _reason?: string }
         Returns: undefined
       }
+      subscription_entitlement: { Args: never; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "customer"

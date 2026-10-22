@@ -22,8 +22,8 @@ export function mediaFallbackUrl(pointer: MediaPointer): string {
 export function onMediaError(pointer: MediaPointer) {
   return (e: SyntheticEvent<HTMLImageElement | HTMLVideoElement>) => {
     const el = e.currentTarget;
-    if (el.dataset.fallbackApplied) return;
-    el.dataset.fallbackApplied = "1";
+    if (el.dataset["fallbackApplied"]) return;
+    el.dataset["fallbackApplied"] = "1";
     if (el instanceof HTMLVideoElement) {
       const sources = el.querySelectorAll("source");
       sources.forEach((s) => {

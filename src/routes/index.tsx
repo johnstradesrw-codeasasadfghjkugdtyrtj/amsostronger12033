@@ -6,6 +6,7 @@ import { PublicLayout } from "@/components/site-chrome";
 import { FeatureGrid, Steps, PricingGrid, FaqList, SectionTitle } from "@/components/marketing";
 import { HERO_IMAGE, ACCOUNT_MGMT_URL } from "@/lib/site";
 import heroReel from "@/assets/quantum-matrix-hero.mp4.asset.json";
+import heroReelWebm from "@/assets/quantum-matrix-hero.webm.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -71,7 +72,6 @@ function HeroReel() {
 
           <video
             ref={videoRef}
-            src={heroReel.url}
             poster={HERO_IMAGE}
             autoPlay
             loop
@@ -86,7 +86,10 @@ function HeroReel() {
               const v = e.currentTarget;
               if (v.duration) setProgress(v.currentTime / v.duration);
             }}
-          />
+          >
+            <source src={heroReel.url} type="video/mp4" />
+            <source src={heroReelWebm.url} type="video/webm" />
+          </video>
 
           <div className="flex items-center gap-3 bg-primary px-4 py-3">
             <button

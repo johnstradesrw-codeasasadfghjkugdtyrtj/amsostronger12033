@@ -13,3 +13,4 @@
 - Admin role is granted only manually in user_roles (auto-confirm is on, so email ownership is unverified); never from user-editable data or signup. Why: prevents privilege escalation.
 - Use subscription_entitlement() as the single paid-access authority, with server time, approved payment ownership, suspension and plan snapshots; protected feature handlers recheck it per request. Why: stale browser state cannot authorize trading.
 - Keep TanStack file routing and existing URLs; use safe same-origin auth return paths and server role checks for admin deep links. Why: refresh and external links must preserve authorization without SPA rewrites.
+- Serve app media from `src/assets/*.asset.json` CDN pointers, and when embedding video put the MP4 source first with a WebM fallback source. Why: browsers that cannot decode H.264 (including headless checks) otherwise show a dead player.

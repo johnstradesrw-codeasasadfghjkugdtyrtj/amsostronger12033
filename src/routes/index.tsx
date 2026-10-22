@@ -1,12 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { ArrowRight, LineChart, Pause, Play, ShieldCheck, Volume2, VolumeX, X, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PublicLayout } from "@/components/site-chrome";
 import { FeatureGrid, Steps, PricingGrid, FaqList, SectionTitle } from "@/components/marketing";
 import { HERO_IMAGE, ACCOUNT_MGMT_URL } from "@/lib/site";
+import { onMediaError } from "@/lib/media";
 import heroReel from "@/assets/quantum-matrix-hero.mp4.asset.json";
 import heroReelWebm from "@/assets/quantum-matrix-hero.webm.asset.json";
+import proof1 from "@/assets/bot-proof-image.jpg.asset.json";
+import proof2 from "@/assets/bot-proof-image-2.jpg.asset.json";
+import proof3 from "@/assets/bot-proof-image-3.jpg.asset.json";
+import proof4 from "@/assets/bot-proof-image-4.jpg.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -80,6 +85,7 @@ function HeroReel() {
             preload="metadata"
             aria-label="Quantum Multi Assets Matrix showcase video"
             className="block aspect-[9/16] w-full bg-card object-cover"
+            onError={onMediaError(heroReel)}
             onPlay={() => setPaused(false)}
             onPause={() => setPaused(true)}
             onTimeUpdate={(e) => {
@@ -128,6 +134,151 @@ function HeroReel() {
   );
 }
 
+const ALBUM = [
+  { pointer: proof1, title: "AUDCAD basket", note: "Scaled buy grid, floating profit" },
+  { pointer: proof2, title: "GOLD scaling", note: "Layered 10-lot buys on XAUUSD" },
+  { pointer: proof3, title: "AUDCAD mid-session", note: "Grid holding through the session" },
+  { pointer: proof4, title: "XAUUSD sells", note: "Sell ladder on a $15K account" },
+] as const;
+
+function BotAlbum() {
+  const [open, setOpen] = useState<number | null>(null);
+  const active = open === null ? null : ALBUM[open];
+
+  useEffect(() => {
+    if (open === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-16">
+      <SectionTitle eyebrow="Live from the bot" title="Real screens from connected accounts" />
+      <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-muted-foreground">
+        Snapshots shared from MT5 accounts running the Matrix — tap any card to view it full size.
+      </p>
+
+      <div className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {ALBUM.map((item, i) => (
+          <button
+            key={item.title}
+            type="button"
+            onClick={() => setOpen(i)}
+            className="group relative overflow-hidden rounded-2xl border border-border bg-card text-left shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-[var(--shadow-glow)] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            <div className="aspect-[9/16] overflow-hidden">
+              <img
+                src={item.pointer.url}
+                alt={`${item.title} — MT5 screenshot from a bot-connected account`}
+                loading="lazy"
+                onError={onMediaError(item.pointer)}
+                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              />
+            </div>
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/80 to-transparent p-3 pt-8">
+              <p className="font-display text-xs font-bold text-primary-foreground">{item.title}</p>
+              <p className="text-[11px] text-primary-foreground/80">{item.note}</p>
+            </div>
+            <span className="absolute right-2 top-2 rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-primary-foreground opacity-0 transition group-hover:opacity-100">
+              View
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {active && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={active.title}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/70 p-4 backdrop-blur-sm"
+          onClick={() => setOpen(null)}
+        >
+          <div className="relative max-h-full" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={active.pointer.url}
+              alt={`${active.title} — full size`}
+              onError={onMediaError(active.pointer)}
+              className="max-h-[85vh] w-auto rounded-2xl border border-border shadow-2xl"
+            />
+            <div className="mt-3 flex items-center justify-between gap-4">
+              <div>
+                <p className="font-display text-sm font-bold text-primary-foreground">{active.title}</p>
+                <p className="text-xs text-primary-foreground/70">{active.note}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setOpen(null)}
+                aria-label="Close"
+                className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground transition hover:opacity-90"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function ConnectMt5Cta() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-16">
+      <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-primary px-6 py-12 text-center shadow-[var(--shadow-glow)] sm:px-12">
+        <div aria-hidden className="absolute -left-16 -top-16 h-48 w-48 rounded-full bg-primary-foreground/10 blur-2xl" />
+        <div aria-hidden className="absolute -bottom-20 -right-10 h-56 w-56 rounded-full bg-primary-foreground/10 blur-2xl" />
+
+        <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary-foreground/80">Featured</p>
+        <h2 className="mx-auto mt-3 max-w-2xl font-display text-3xl font-bold text-primary-foreground sm:text-4xl">
+          Connect your MT5 account to the Matrix
+        </h2>
+        <p className="mx-auto mt-4 max-w-xl text-sm text-primary-foreground/80 sm:text-base">
+          Link your broker account, follow the guided setup, and let the Quantum Multi Assets Matrix
+          manage your multi-asset workflow from one dashboard.
+        </p>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <Button size="lg" variant="secondary" asChild className="gap-2 font-bold">
+            <Link to="/dashboard/mt5">
+              <Zap className="h-4 w-4" />
+              Connect MT5 Now
+            </Link>
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            asChild
+            className="gap-2 border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
+          >
+            <Link to="/how-it-works">
+              See how it works
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
+        </div>
+
+        <div className="mt-10 grid gap-4 text-left sm:grid-cols-3">
+          {[
+            { icon: ShieldCheck, title: "Subscription-secured", note: "Access is verified on the server for every session." },
+            { icon: LineChart, title: "Multi-asset coverage", note: "Forex, metals and more from a single connection." },
+            { icon: Zap, title: "Guided setup", note: "Broker, server and account ID — step by step." },
+          ].map((f) => (
+            <div key={f.title} className="rounded-2xl bg-primary-foreground/10 p-4">
+              <f.icon className="h-5 w-5 text-primary-foreground" />
+              <p className="mt-2 font-display text-sm font-bold text-primary-foreground">{f.title}</p>
+              <p className="mt-1 text-xs text-primary-foreground/75">{f.note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Index() {
   return (
     <PublicLayout>
@@ -148,6 +299,9 @@ function Index() {
         </div>
         <HeroReel />
       </section>
+
+      <ConnectMt5Cta />
+      <BotAlbum />
 
       <section className="mx-auto max-w-7xl px-4 py-16">
         <SectionTitle eyebrow="How it works" title="Five clear steps" />

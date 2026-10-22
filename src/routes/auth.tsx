@@ -11,7 +11,7 @@ import { safeReturnPath } from '@/lib/navigation';
 type Mode = "login" | "signup" | "forgot";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>): { mode?: Mode | undefined; redirect?: string } => ({
+  validateSearch: (s: Record<string, unknown>): { mode?: Mode | undefined; redirect?: string | undefined } => ({
     mode: s["mode"] === "signup" || s["mode"] === "forgot" ? (s["mode"] as Mode) : undefined,
     redirect: typeof s['redirect'] === 'string' ? safeReturnPath(s['redirect']) : undefined,
   }),

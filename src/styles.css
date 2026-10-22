@@ -101,6 +101,29 @@
   --shadow-glow: 0 4px 20px -10px color-mix(in oklab, var(--primary) 20%, transparent);
 }
 
+@keyframes qmam-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -12px, 0); }
+}
+
+@layer utilities {
+  .animate-qmam-float {
+    animation: qmam-float 7s ease-in-out infinite;
+  }
+  .animate-qmam-float-slow {
+    animation: qmam-float 11s ease-in-out infinite;
+    animation-delay: -3s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-qmam-float,
+  .animate-qmam-float-slow {
+    animation: none;
+  }
+}
+
+
 @layer base {
   * {
     border-color: var(--color-border);

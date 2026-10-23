@@ -74,6 +74,7 @@ export function usePlans() {
       if (error) throw error;
       return data;
     },
+    staleTime: 60000,
   });
 }
 

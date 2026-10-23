@@ -7,9 +7,10 @@ export function useAccount() {
   const account = useQuery({
     queryKey: ["account"],
     queryFn: async () => {
-      const { data: u } = await supabase.auth.getUser();
-      if (!u.user) throw new Error('Please sign in.');
-      const uid = u.user.id;
+      const { data: s } = await supabase.auth.getSession();
+      const user = s.session?.user;
+      if (!user) throw new Error('Please sign in.');
+      const uid = user.id;
       const [subs, pays, roles, prof] = await Promise.all([
         supabase.from("subscriptions").select("*").eq("user_id", uid).order("expires_at", { ascending: false }),
         supabase.from("payments").select("*").eq("user_id", uid).order("created_at", { ascending: false }),

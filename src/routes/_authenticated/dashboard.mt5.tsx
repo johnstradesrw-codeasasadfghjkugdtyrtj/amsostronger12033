@@ -89,9 +89,14 @@ function Mt5Setup({ planName, mt5Limit, allowed }: { planName: string | null; mt
 
   const remaining = mt5Limit - (saved?.length ?? 0);
 
-  const save = async (event: React.FormEvent) => {
+  const next = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!allowed) { toast.error('No active subscription. Please subscribe to connect MT5.'); return; }
+    if (step < 3) { setStep(step + 1); return; }
+    void save();
+  };
+
+  const save = async () => {
+    if (!allowed) { setFailed(true); return; }
     setBusy(true);
     const { data: s } = await supabase.auth.getSession();
     const uid = s.session?.user.id;
@@ -120,25 +125,49 @@ function Mt5Setup({ planName, mt5Limit, allowed }: { planName: string | null; mt
           Pick your broker, then enter your MT5 server, account number and password. Our team completes the secure activation on our side.
         </p>
 
-        {remaining > 0 ? (
-          <form onSubmit={save} className="mt-5 grid gap-4 border-t pt-5 sm:grid-cols-2">
-            <BrokerPicker value={broker} onChange={setBroker} />
-            <div className="space-y-2">
-              <Label htmlFor="mt5-server">MT5 server</Label>
-              <Input id="mt5-server" required maxLength={120} placeholder="e.g. Exness-MT5Real" value={server} onChange={e => setServer(e.target.value)} />
+        {failed ? (
+          <div role="alert" className="mt-5 space-y-3 rounded-lg border-2 border-destructive bg-destructive/10 p-5 text-center">
+            <p className="text-lg font-bold text-destructive">⚠️ Connection failed</p>
+            <p className="font-semibold">No active paid plan</p>
+            <div className="flex flex-wrap justify-center gap-2">
+              <Button asChild><Link to="/dashboard/plans">View plans</Link></Button>
+              <Button variant="outline" onClick={() => { setFailed(false); setStep(0); }}>Try again</Button>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="mt5-account">Account number</Label>
-              <Input id="mt5-account" inputMode="numeric" pattern="[0-9]+" required maxLength={30} value={account} onChange={e => setAccount(e.target.value)} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="mt5-password">Account password</Label>
-              <Input id="mt5-password" type="password" required maxLength={120} value={password} onChange={e => setPassword(e.target.value)} />
-              <p className="text-xs text-muted-foreground">Tip: use your investor (read-only) password if your broker offers one.</p>
-            </div>
-            <div className="flex flex-wrap items-center gap-4 sm:col-span-2">
-              <Button type="submit" disabled={busy}><Link2 className="h-4 w-4" />{busy ? 'Saving…' : 'Submit MT5 details'}</Button>
-              <span className="flex items-center gap-2 text-xs text-muted-foreground"><ShieldCheck className="h-4 w-4" />Only you and our admin team can see these details</span>
+          </div>
+        ) : remaining > 0 || !allowed ? (
+          <form onSubmit={next} className="mt-5 space-y-4 border-t pt-5">
+            <p className="text-xs font-semibold text-muted-foreground">Step {step + 1} of 4</p>
+            {step === 0 && <BrokerPicker value={broker} onChange={setBroker} />}
+            {step === 1 && (
+              <div className="space-y-2">
+                <Label htmlFor="mt5-server">MT5 server</Label>
+                <Input id="mt5-server" autoFocus required maxLength={120} placeholder="e.g. Exness-MT5Real" value={server} onChange={e => setServer(e.target.value)} />
+              </div>
+            )}
+            {step === 2 && (
+              <>
+                <div className="space-y-2">
+                  <Label htmlFor="mt5-account">Account number</Label>
+                  <Input id="mt5-account" autoFocus inputMode="numeric" pattern="[0-9]+" required maxLength={30} value={account} onChange={e => setAccount(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="mt5-password">Account password</Label>
+                  <Input id="mt5-password" type="password" required maxLength={120} value={password} onChange={e => setPassword(e.target.value)} />
+                </div>
+              </>
+            )}
+            {step === 3 && (
+              <div className="rounded-lg border bg-card p-4 text-sm">
+                <p><b>Broker:</b> {broker}</p>
+                <p><b>Server:</b> {server}</p>
+                <p><b>Account:</b> {account}</p>
+              </div>
+            )}
+            <div className="flex flex-wrap gap-2">
+              {step > 0 && <Button type="button" variant="outline" onClick={() => setStep(step - 1)}>Back</Button>}
+              <Button type="submit" disabled={busy || (step === 0 && !broker.trim())}>
+                <Link2 className="h-4 w-4" />{step < 3 ? 'Continue' : busy ? 'Connecting…' : 'Confirm connection'}
+              </Button>
             </div>
           </form>
         ) : (

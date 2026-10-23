@@ -18,7 +18,8 @@ export const getProtectedFeature = createServerFn({ method: 'POST' }).middleware
     if (error) throw new Error('Unable to verify subscription access.');
     const entitlement = result as unknown as Entitlement;
     if (!permitsFeature(entitlement, data.feature)) {
-      setResponseStatus(403);
+      // Status checks return a normal response so the page can show the lock screen.
+      if (data.action && data.action !== 'status') setResponseStatus(403);
       return { allowed: false as const, entitlement, integration: 'unavailable' as const };
     }
     // No execution bridge is configured. Never accept credentials or pretend to register/start an account.

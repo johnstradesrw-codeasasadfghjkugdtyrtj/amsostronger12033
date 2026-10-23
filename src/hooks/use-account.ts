@@ -7,9 +7,10 @@ export function useAccount() {
   const account = useQuery({
     queryKey: ["account"],
     queryFn: async () => {
-      const { data: u } = await supabase.auth.getUser();
-      if (!u.user) throw new Error('Please sign in.');
-      const uid = u.user.id;
+      const { data: s } = await supabase.auth.getSession();
+      const user = s.session?.user;
+      if (!user) throw new Error('Please sign in.');
+      const uid = user.id;
       const [subs, pays, roles, prof] = await Promise.all([
         supabase.from("subscriptions").select("*").eq("user_id", uid).order("expires_at", { ascending: false }),
         supabase.from("payments").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
@@ -19,7 +20,7 @@ export function useAccount() {
       const subscriptions = subs.data ?? [];
       for (const result of [subs, pays, roles, prof]) if (result.error) throw result.error;
       return {
-        user: u.user,
+        user,
         profile: prof.data,
         subscriptions,
         payments: pays.data ?? [],
@@ -27,6 +28,7 @@ export function useAccount() {
         isAdmin: !!roles.data?.some((r) => r.role === "admin"),
       };
     },
+    staleTime: 30000,
   });
   return { ...account, isLoading: account.isLoading || entitlement.isLoading, data: account.data ? { ...account.data, entitlement: entitlement.data, active: entitlement.data?.allowed ? account.data.subscriptions.find(s => s.id === entitlement.data?.subscription_id) ?? null : null } : undefined };
 }

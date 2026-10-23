@@ -1,0 +1,1 @@
+CREATE POLICY "Admins insert own mt5 setup" ON public.mt5_setup_requests FOR INSERT TO authenticated WITH CHECK (auth.uid() = user_id AND public.has_role(auth.uid(), 'admin'));

@@ -64,6 +64,13 @@
       "when": 1792748002131,
       "tag": "0008_payment_methods_enabled_only_read",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792748893626,
+      "tag": "0009_admin_mt5_insert",
+      "breakpoints": true
     }
   ]
 }

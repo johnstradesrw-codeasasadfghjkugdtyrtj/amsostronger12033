@@ -4,7 +4,7 @@ import { useLocation } from '@tanstack/react-router';
 import { Wrench } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { blockedPage } from '@/lib/maintenance';
-import { telegramLink } from '@/lib/site';
+import { SUPPORT_URL } from '@/lib/site';
 
 export function useSitePages() {
   return useQuery({
@@ -37,7 +37,7 @@ export function MaintenanceGate({ children }: { children: ReactNode }) {
         <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/15 text-primary"><Wrench className="h-7 w-7" /></div>
         <h1 className="font-display text-2xl font-bold">Under maintenance</h1>
         <p className="mt-2 text-muted-foreground">{msg || 'We are improving this page. Please check back shortly.'}</p>
-        <a href={telegramLink()} target="_blank" rel="noreferrer" className="mt-5 inline-flex rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground">Contact support</a>
+        <a href={SUPPORT_URL} target="_blank" rel="noreferrer" className="mt-5 inline-flex rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground">Contact support</a>
       </div>
     </div>
   );

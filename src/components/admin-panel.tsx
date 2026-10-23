@@ -17,6 +17,8 @@ import { useAccount, statusLabel } from "@/hooks/use-account";
 import { isSubscriptionActive } from "@/lib/site";
 import { AdminUsers } from '@/components/admin-users';
 import { AdminMt5 } from '@/components/admin-mt5';
+import { MANAGED_PAGES } from '@/lib/maintenance';
+import { useSitePages } from '@/components/maintenance-gate';
 
 export function Admin({ section = "payments" }: { section?: string }) {
   const { data, isLoading } = useAccount();
@@ -41,6 +43,7 @@ export function Admin({ section = "payments" }: { section?: string }) {
           <TabsTrigger value="subs">Subscriptions</TabsTrigger>
           <TabsTrigger value="plans">Plans</TabsTrigger>
           <TabsTrigger value="methods">Payment methods</TabsTrigger>
+          <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
         </TabsList>
         <TabsContent value="users"><AdminUsers /></TabsContent>
         <TabsContent value="mt5"><AdminMt5 uid={data.user.id} /></TabsContent>
@@ -49,6 +52,7 @@ export function Admin({ section = "payments" }: { section?: string }) {
         <TabsContent value="subs"><SubsAdmin /></TabsContent>
         <TabsContent value="plans"><PlansAdmin /></TabsContent>
         <TabsContent value="methods"><MethodsAdmin uid={data.user.id} /></TabsContent>
+        <TabsContent value="maintenance"><MaintenanceAdmin /></TabsContent>
       </Tabs>
     </div>
   );
@@ -200,7 +204,7 @@ function MethodEditor({ m, uid }: { m: Tables<"payment_methods">; uid: string })
     if (f.address !== m.address && m.enabled && !confirm(`Change the LIVE receiving address for ${m.name}?\n\nOld: ${m.address}\nNew: ${f.address}`)) return;
     const { error } = await supabase.from("payment_methods").update({
       name: f.name, network: f.network, address: f.address || null, instructions: f.instructions,
-      network_warning: f.network_warning, enabled: f.enabled, sort_order: f.sort_order, updated_at: new Date().toISOString(),
+      network_warning: f.network_warning, qr_image_url: f.qr_image_url, enabled: f.enabled, sort_order: f.sort_order, updated_at: new Date().toISOString(),
     }).eq("id", f.id);
     if (error) { toast.error(error.message); return; }
     await supabase.from("admin_audit").insert({ actor: uid, action: "payment_method_update", details: { id: f.id, old_address: m.address, new_address: f.address, enabled: f.enabled } });
@@ -215,14 +219,59 @@ function MethodEditor({ m, uid }: { m: Tables<"payment_methods">; uid: string })
         <div><Label>Order</Label><Input type="number" value={f.sort_order} onChange={(e) => setF({ ...f, sort_order: Number(e.target.value) })} /></div>
         <div className="sm:col-span-3"><Label>Receiving address / merchant ID</Label><Input className="font-mono" value={f.address ?? ""} onChange={(e) => setF({ ...f, address: e.target.value })} placeholder="Not configured" /></div>
         <div className="sm:col-span-3"><Label>Instructions</Label><Textarea value={f.instructions ?? ""} onChange={(e) => setF({ ...f, instructions: e.target.value })} /></div>
+        <div className="sm:col-span-3">
+          <Label>Payment QR code</Label>
+          <div className="mt-1 flex flex-wrap items-center gap-3">
+            {f.qr_image_url && <img src={f.qr_image_url} alt="QR code" className="h-24 w-24 rounded-lg border bg-card object-contain p-1" />}
+            <Input type="file" accept="image/png,image/jpeg,image/webp" className="max-w-xs" onChange={(e) => {
+              const file = e.target.files?.[0]; if (!file) return;
+              if (file.size > 500_000) { toast.error("QR image must be under 500KB"); return; }
+              const r = new FileReader(); r.onload = () => setF({ ...f, qr_image_url: String(r.result) }); r.readAsDataURL(file);
+            }} />
+            {f.qr_image_url && <Button size="sm" variant="outline" onClick={() => setF({ ...f, qr_image_url: null })}>Remove QR</Button>}
+          </div>
+        </div>
         <div className="sm:col-span-3"><Label>Network warning</Label><Input value={f.network_warning ?? ""} onChange={(e) => setF({ ...f, network_warning: e.target.value })} /></div>
       </div>
       <div className="mt-3 flex items-center gap-4 text-sm">
         <label className="flex items-center gap-2"><Switch checked={f.enabled} onCheckedChange={(v) => setF({ ...f, enabled: v })} />Enabled</label>
-        {!f.address && <Badge variant="outline">Not Configured</Badge>}
+        {!f.address && !f.qr_image_url && <Badge variant="outline">Not Configured</Badge>}
         <Button size="sm" onClick={save}>Save method</Button>
       </div>
     </Card>
   );
 }
 
+
+function MaintenanceAdmin() {
+  const qc = useQueryClient();
+  const { data: pages } = useSitePages();
+  const [msg, setMsg] = useState("");
+  const toggle = async (path: string, enabled: boolean) => {
+    const { error } = await supabase.from("site_pages").upsert({ path, enabled, message: enabled ? null : msg || null, updated_at: new Date().toISOString() });
+    if (error) { toast.error(error.message); return; }
+    toast.success(enabled ? "Page is live" : "Page is now in maintenance");
+    qc.invalidateQueries({ queryKey: ["site-pages"] });
+  };
+  return (
+    <Card title="Page maintenance">
+      <p className="mb-3 text-sm text-muted-foreground">Turn a page off to show visitors a maintenance screen. Admins always see every page.</p>
+      <Label>Maintenance message (optional)</Label>
+      <Input className="mb-4" value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="We are improving this page. Back soon." />
+      <div className="divide-y divide-border">
+        {MANAGED_PAGES.map((p) => {
+          const on = pages?.find((x) => x.path === p.path)?.enabled ?? true;
+          return (
+            <div key={p.path} className="flex items-center justify-between gap-3 py-3">
+              <div><p className="font-medium">{p.label}</p><p className="font-mono text-xs text-muted-foreground">{p.path}</p></div>
+              <div className="flex items-center gap-3">
+                <Badge variant={on ? "default" : "destructive"}>{on ? "Live" : "Maintenance"}</Badge>
+                <Switch checked={on} onCheckedChange={(v) => toggle(p.path, v)} aria-label={`Toggle ${p.label}`} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </Card>
+  );
+}

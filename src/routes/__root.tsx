@@ -1,3 +1,4 @@
+import { MaintenanceGate } from '@/components/maintenance-gate';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -132,7 +133,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <MaintenanceGate><Outlet /></MaintenanceGate>
       <Toaster richColors />
     </QueryClientProvider>
   );

@@ -1,6 +1,11 @@
 export const HERO_IMAGE = "https://i.ibb.co/DfNy0vr0/image.png";
-export const ACCOUNT_MGMT_URL = "https://t.me/qmamatrix";
-export const SUPPORT_URL = "https://t.me/fxcodding";
+export const TELEGRAM_USERNAME = "fxcodding";
+export const telegramLink = (message: string) =>
+  `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
+export const SUPPORT_URL = telegramLink("Hello QMAM team, I need help with my account.");
+export const ACCOUNT_MGMT_URL = SUPPORT_URL;
+export const forgotPasswordLink = (email?: string) =>
+  telegramLink(`Hello, my email is ${email?.trim() || "[your email]"}. Please help me change my password.`);
 export const ADMIN_EMAILS = ["dufashwenayo@gmail.com", "eclifunded@gmail.com"] as const;
 
 export type SubLike = { expires_at: string; revoked: boolean };

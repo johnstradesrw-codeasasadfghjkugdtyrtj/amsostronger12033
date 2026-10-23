@@ -12,6 +12,7 @@ import proof1 from "@/assets/bot-proof-image.jpg.asset.json";
 import proof2 from "@/assets/bot-proof-image-2.jpg.asset.json";
 import proof3 from "@/assets/bot-proof-image-3.jpg.asset.json";
 import proof4 from "@/assets/bot-proof-image-4.jpg.asset.json";
+import { PlatformStatus } from '@/components/platform-status';
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -60,7 +61,6 @@ function HeroReel() {
 
   return (
     <div className="relative mx-auto w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[350px]">
-      <div aria-hidden className="absolute -inset-10 -z-10 rounded-[4rem] bg-primary/10 blur-3xl" />
       <div aria-hidden className="absolute -right-5 -top-5 -z-10 hidden h-full w-full rounded-[2.4rem] border border-primary/30 sm:block" />
 
       <div className="animate-qmam-float relative rounded-[2.3rem] border border-primary/40 bg-primary p-1.5 shadow-[var(--shadow-glow)]">
@@ -156,9 +156,9 @@ function BotAlbum() {
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-16">
-      <SectionTitle eyebrow="Live from the bot" title="Real screens from connected accounts" />
+      <SectionTitle eyebrow="MT5 album" title="Shared trading screenshots" />
       <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-muted-foreground">
-        Snapshots shared from MT5 accounts running the Matrix — tap any card to view it full size.
+        Community-shared snapshots. These images do not show current connection or bot activity.
       </p>
 
       <div className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -228,17 +228,14 @@ function BotAlbum() {
 function ConnectMt5Cta() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-16">
-      <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-primary px-6 py-12 text-center shadow-[var(--shadow-glow)] sm:px-12">
-        <div aria-hidden className="absolute -left-16 -top-16 h-48 w-48 rounded-full bg-primary-foreground/10 blur-2xl" />
-        <div aria-hidden className="absolute -bottom-20 -right-10 h-56 w-56 rounded-full bg-primary-foreground/10 blur-2xl" />
+      <div className="relative border-y border-primary/30 bg-primary px-6 py-12 text-center sm:px-12">
 
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary-foreground/80">Featured</p>
         <h2 className="mx-auto mt-3 max-w-2xl font-display text-3xl font-bold text-primary-foreground sm:text-4xl">
           Connect your MT5 account to the Matrix
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-sm text-primary-foreground/80 sm:text-base">
-          Link your broker account, follow the guided setup, and let the Quantum Multi Assets Matrix
-          manage your multi-asset workflow from one dashboard.
+          Subscription approval unlocks eligible MT5 access. Account connection will become available once the secure MT5 service is configured.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
@@ -292,7 +289,8 @@ function Index() {
             Explore the platform, and discover tools designed for your MT5 trading workflow.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button size="lg" asChild><Link to="/auth" search={{ mode: "signup" }}>Create Free Account</Link></Button>
+            <Button size="lg" asChild><Link to="/dashboard/mt5"><Zap className="h-4 w-4" />Connect MT5</Link></Button>
+            <Button size="lg" variant="outline" asChild><Link to="/auth" search={{ mode: "signup" }}>Create Free Account</Link></Button>
             <Button size="lg" variant="outline" asChild><Link to="/pricing">View Plans</Link></Button>
             <Button size="lg" variant="secondary" asChild><a href={ACCOUNT_MGMT_URL} target="_blank" rel="noreferrer">Account Management — Click Here</a></Button>
           </div>
@@ -300,6 +298,7 @@ function Index() {
         <HeroReel />
       </section>
 
+      <PlatformStatus />
       <ConnectMt5Cta />
       <BotAlbum />
 

@@ -9,7 +9,7 @@ export function SubscriptionLock({ entitlement, feature = 'MT5' }: { entitlement
     <LockKeyhole className="h-10 w-10 text-primary" aria-hidden />
     <p className="mt-6 text-sm font-semibold text-primary">{accessLabels[entitlement.status]}</p>
     <h1 className="mt-3 font-display text-2xl font-bold sm:text-3xl">{feature} CONNECTION LOCKED</h1>
-    <p className="mt-4 text-lg">An active subscription is required to connect your MetaTrader 5 account.</p>
+    <p className="mt-4 text-lg">Pardon, you need an approved subscription to connect your MT5 account.</p>
     <p className="mt-3 text-muted-foreground">Choose a subscription plan and complete payment verification to unlock MT5 account connection and eligible trading features.</p>
     {entitlement.status === 'pending' && <p className="mt-5 border-l-2 border-primary pl-4">Your payment is awaiting administrator verification. MT5 connection will become available after your subscription is approved.</p>}
     {renew && <p className="mt-5">Your subscription has {entitlement.status === 'expired' ? 'expired' : 'been revoked'}. Renew your subscription to request access again.</p>}

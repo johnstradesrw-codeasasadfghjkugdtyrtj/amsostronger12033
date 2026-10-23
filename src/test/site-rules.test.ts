@@ -18,7 +18,7 @@ describe("site rules", () => {
   });
   it("exactly two admin emails and correct Telegram links", () => {
     expect(ADMIN_EMAILS).toEqual(["dufashwenayo@gmail.com", "eclifunded@gmail.com"]);
-    expect(ACCOUNT_MGMT_URL).toBe("https://t.me/qmamatrix");
-    expect(SUPPORT_URL).toBe("https://t.me/fxcodding");
+    expect(ACCOUNT_MGMT_URL).toContain("https://t.me/fxcodding?text=");
+    expect(SUPPORT_URL).toContain("https://t.me/fxcodding?text=");
   });
 });

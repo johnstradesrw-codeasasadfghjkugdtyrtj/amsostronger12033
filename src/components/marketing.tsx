@@ -117,7 +117,7 @@ const faqs: [string, string][] = [
   ["How do I connect my MT5 account?", "Follow the Connect MT5 page in your dashboard. The live execution bridge is still being integrated."],
   ["How do I renew my subscription?", "Use the Renew button in your dashboard. Renewal time is added after your current expiry."],
   ["What happens when my subscription expires?", "Paid features lock automatically."],
-  ["Where can I get account-management assistance?", "Use 'Account Management — Click Here' (Telegram @qmamatrix)."],
+  ["Where can I get account-management assistance?", "Use 'Account Management — Click Here' (Telegram @fxcodding)."],
   ["How do I contact support?", "Technical support is on Telegram at @fxcodding."],
 ];
 export function FaqList() {

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/site-chrome";
 import { safeReturnPath } from '@/lib/navigation';
-import { ACCOUNT_MGMT_URL } from '@/lib/site';
+import { forgotPasswordLink } from '@/lib/site';
 
 type Mode = "login" | "signup";
 
@@ -99,7 +99,7 @@ function AuthPage() {
           {mode !== "signup" && <button className="text-left text-primary" onClick={() => { setSent(null); setMode("signup"); }}>New here? Create a free account</button>}
           {mode === "login" && (
             <a
-              href={ACCOUNT_MGMT_URL}
+              href={forgotPasswordLink(email)}
               target="_blank"
               rel="noreferrer"
               className="text-left text-primary"

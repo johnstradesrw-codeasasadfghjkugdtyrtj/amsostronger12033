@@ -21,7 +21,7 @@ function Pay() {
         supabase.from("plans").select("*").eq("id", planId).maybeSingle(),
         supabase.from("payment_methods").select("*").order("sort_order"),
       ]);
-      return { plan: plan.data, methods: (methods.data ?? []).filter((m) => m.enabled && !!m.address) };
+      return { plan: plan.data, methods: (methods.data ?? []).filter((m) => m.enabled && (!!m.address || !!m.qr_image_url)) };
     },
   });
   const [methodId, setMethodId] = useState("");
@@ -105,6 +105,12 @@ function Pay() {
           </div>
           {method && (
             <Card title={`Send to (${method.network ?? method.asset})`}>
+              {method.qr_image_url && (
+                <div className="mb-4 flex flex-col items-center gap-2">
+                  <img src={method.qr_image_url} alt={`${method.name} payment QR code`} className="h-52 w-52 rounded-2xl border-4 border-primary/30 bg-card object-contain p-2 shadow-md" />
+                  <p className="text-xs text-muted-foreground">Scan with your wallet app</p>
+                </div>
+              )}
               <button onClick={() => { navigator.clipboard.writeText(method.address ?? ''); toast.success("Address copied"); }}
                 className="flex w-full items-center gap-2 rounded-lg bg-muted p-3 text-left">
                 <span className="min-w-0 flex-1 break-all font-mono text-sm">{method.address}</span>

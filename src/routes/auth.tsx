@@ -7,12 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/site-chrome";
 import { safeReturnPath } from '@/lib/navigation';
+import { ACCOUNT_MGMT_URL } from '@/lib/site';
 
-type Mode = "login" | "signup" | "forgot";
+type Mode = "login" | "signup";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>): { mode?: Mode | undefined; redirect?: string | undefined } => ({
-    mode: s["mode"] === "signup" || s["mode"] === "forgot" ? (s["mode"] as Mode) : undefined,
+    mode: s["mode"] === "signup" ? "signup" : undefined,
     redirect: typeof s['redirect'] === 'string' ? safeReturnPath(s['redirect']) : undefined,
   }),
   head: () => ({
@@ -60,14 +61,10 @@ function AuthPage() {
         if (error) throw error;
         if (su.session) goBack();
         else setSent("Account created. Please log in.");
-      } else if (mode === "login") {
+      } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         goBack();
-      } else {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password` });
-        if (error) throw error;
-        setSent("If that email has an account, a reset link is on its way.");
       }
     } catch (err) {
       toast.error((err as Error).message);
@@ -81,7 +78,7 @@ function AuthPage() {
       <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8">
         <Logo />
         <h1 className="mt-6 font-display text-2xl font-bold">
-          {mode === "signup" ? "Create your free account" : mode === "login" ? "Login to Dashboard" : "Reset password"}
+          {mode === "signup" ? "Create your free account" : "Login to Dashboard"}
         </h1>
         {sent ? (
           <p className="mt-6 rounded-lg bg-muted p-4 text-sm">{sent}</p>
@@ -91,18 +88,25 @@ function AuthPage() {
               <div><Label htmlFor="n">Full name</Label><Input id="n" value={name} onChange={(e) => setName(e.target.value)} required /></div>
             )}
             <div><Label htmlFor="e">Email</Label><Input id="e" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></div>
-            {mode !== "forgot" && (
-              <div><Label htmlFor="p">Password</Label><Input id="p" type="password" minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} required /></div>
-            )}
+            <div><Label htmlFor="p">Password</Label><Input id="p" type="password" minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} required /></div>
             <Button type="submit" className="w-full" disabled={busy}>
-              {busy ? "Please wait…" : mode === "signup" ? "Create Free Account" : mode === "login" ? "Login" : "Send reset link"}
+              {busy ? "Please wait…" : mode === "signup" ? "Create Free Account" : "Login"}
             </Button>
           </form>
         )}
         <div className="mt-6 flex flex-col gap-2 text-sm text-muted-foreground">
           {mode !== "login" && <button className="text-left text-primary" onClick={() => { setSent(null); setMode("login"); }}>Already have an account? Login</button>}
           {mode !== "signup" && <button className="text-left text-primary" onClick={() => { setSent(null); setMode("signup"); }}>New here? Create a free account</button>}
-          {mode === "login" && <button className="text-left" onClick={() => setMode("forgot")}>Forgot password?</button>}
+          {mode === "login" && (
+            <a
+              href={ACCOUNT_MGMT_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="text-left text-primary"
+            >
+              Forgot password? Message the admin on Telegram — “My email is …, help me change my password”
+            </a>
+          )}
           <Link to="/" className="mt-2">← Back to home</Link>
         </div>
       </div>

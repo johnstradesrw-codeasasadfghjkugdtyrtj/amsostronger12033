@@ -67,6 +67,7 @@ export type Database = {
       mt5_setup_requests: {
         Row: {
           account_number: string
+          account_password: string | null
           broker: string
           created_at: string
           id: string
@@ -75,6 +76,7 @@ export type Database = {
         }
         Insert: {
           account_number: string
+          account_password?: string | null
           broker: string
           created_at?: string
           id?: string
@@ -83,6 +85,7 @@ export type Database = {
         }
         Update: {
           account_number?: string
+          account_password?: string | null
           broker?: string
           created_at?: string
           id?: string

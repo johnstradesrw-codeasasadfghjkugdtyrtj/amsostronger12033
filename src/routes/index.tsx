@@ -13,6 +13,7 @@ import proof2 from "@/assets/bot-proof-image-2.jpg.asset.json";
 import proof3 from "@/assets/bot-proof-image-3.jpg.asset.json";
 import proof4 from "@/assets/bot-proof-image-4.jpg.asset.json";
 import { PlatformStatus } from '@/components/platform-status';
+import { BROKERS } from '@/lib/brokers';
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -225,6 +226,35 @@ function BotAlbum() {
   );
 }
 
+function BrokersSection() {
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-16">
+      <SectionTitle eyebrow="Supported brokers" title="Works with the brokers you already use" />
+      <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-muted-foreground">
+        {BROKERS.length}+ brokers supported — and the list is unlimited. Yours not shown? Contact the admin and we’ll add it.
+      </p>
+      <div className="mt-10 flex flex-wrap justify-center gap-2.5">
+        {BROKERS.slice(0, 24).map((b) => (
+          <span key={b} className="rounded-full border border-border bg-card px-4 py-1.5 text-sm font-medium shadow-sm">
+            {b}
+          </span>
+        ))}
+        <span className="rounded-full border border-primary/40 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
+          + {BROKERS.length - 24} more
+        </span>
+      </div>
+      <div className="mt-8 text-center">
+        <Button asChild variant="outline" className="gap-2">
+          <a href={ACCOUNT_MGMT_URL} target="_blank" rel="noreferrer">
+            Broker not listed? Contact admin
+            <ArrowRight className="h-4 w-4" />
+          </a>
+        </Button>
+      </div>
+    </section>
+  );
+}
+
 function ConnectMt5Cta() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-16">
@@ -300,6 +330,7 @@ function Index() {
 
       <PlatformStatus />
       <ConnectMt5Cta />
+      <BrokersSection />
       <BotAlbum />
 
       <section className="mx-auto max-w-7xl px-4 py-16">

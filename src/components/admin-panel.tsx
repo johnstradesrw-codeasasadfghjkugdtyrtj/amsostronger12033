@@ -15,6 +15,8 @@ import { PageHead, Card } from "@/components/dash-ui";
 import { Logo } from "@/components/site-chrome";
 import { useAccount, statusLabel } from "@/hooks/use-account";
 import { isSubscriptionActive } from "@/lib/site";
+import { AdminUsers } from '@/components/admin-users';
+import { AdminMt5 } from '@/components/admin-mt5';
 
 export function Admin({ section = "payments" }: { section?: string }) {
   const { data, isLoading } = useAccount();
@@ -34,12 +36,14 @@ export function Admin({ section = "payments" }: { section?: string }) {
         <TabsList className="h-auto flex-wrap justify-start gap-1">
           <TabsTrigger value="payments">Payments</TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
+          <TabsTrigger value="mt5">MT5 setup</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
           <TabsTrigger value="subs">Subscriptions</TabsTrigger>
           <TabsTrigger value="plans">Plans</TabsTrigger>
           <TabsTrigger value="methods">Payment methods</TabsTrigger>
         </TabsList>
-        <TabsContent value="users"><UsersAdmin /></TabsContent>
+        <TabsContent value="users"><AdminUsers /></TabsContent>
+        <TabsContent value="mt5"><AdminMt5 uid={data.user.id} /></TabsContent>
         <TabsContent value="settings"><Card title="Access settings"><p>Administrator roles are provisioned manually. Payment approval is required for paid access. The MT5 execution bridge is not configured.</p></Card></TabsContent>
         <TabsContent value="payments"><PaymentsAdmin /></TabsContent>
         <TabsContent value="subs"><SubsAdmin /></TabsContent>
@@ -222,7 +226,3 @@ function MethodEditor({ m, uid }: { m: Tables<"payment_methods">; uid: string })
   );
 }
 
-function UsersAdmin() {
- const { data } = useQuery({ queryKey: ['admin-users'], queryFn: async () => { const {data,error}=await supabase.from('profiles').select('id,email,full_name'); if(error) throw error; return data; } });
- return <div className="mt-4 space-y-3">{data?.map(user => <Card key={user.id}><p className="font-semibold break-all">{user.email}</p><p>{user.full_name}</p></Card>)}</div>;
-}

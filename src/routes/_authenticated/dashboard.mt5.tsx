@@ -76,6 +76,8 @@ function Mt5Setup({ planName, mt5Limit, allowed }: { planName: string | null; mt
   const [account, setAccount] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
+  const [step, setStep] = useState(0);
+  const [failed, setFailed] = useState(false);
 
   const { data: saved, error: loadError } = useQuery({
     queryKey: ['my-mt5-setup'],
@@ -104,8 +106,8 @@ function Mt5Setup({ planName, mt5Limit, allowed }: { planName: string | null; mt
       ? await supabase.from('mt5_setup_requests').insert({ user_id: uid, broker: broker.trim(), server: server.trim(), account_number: account.trim(), account_password: password })
       : { error: new Error('Please sign in.') };
     setBusy(false);
-    if (error) { toast.error('No active subscription. Please subscribe to connect MT5.'); return; }
-    setBroker(''); setServer(''); setAccount(''); setPassword('');
+    if (error) { setFailed(true); return; }
+    setBroker(''); setServer(''); setAccount(''); setPassword(''); setStep(0);
     toast.success('MT5 details received — activation in progress.');
     qc.invalidateQueries({ queryKey: ['my-mt5-setup'] });
   };

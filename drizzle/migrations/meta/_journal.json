@@ -57,6 +57,13 @@
       "when": 1792747624978,
       "tag": "0007_mt5_setup_account_password",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792748002131,
+      "tag": "0008_payment_methods_enabled_only_read",
+      "breakpoints": true
     }
   ]
 }

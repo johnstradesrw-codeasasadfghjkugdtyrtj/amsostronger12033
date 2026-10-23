@@ -14,3 +14,6 @@
 - Use subscription_entitlement() as the single paid-access authority, with server time, approved payment ownership, suspension and plan snapshots; protected feature handlers recheck it per request. Why: stale browser state cannot authorize trading.
 - Keep TanStack file routing and existing URLs; use safe same-origin auth return paths and server role checks for admin deep links. Why: refresh and external links must preserve authorization without SPA rewrites.
 - Serve app media from `src/assets/*.asset.json` CDN pointers, and when embedding video put the MP4 source first with a WebM fallback source. Why: browsers that cannot decode H.264 (including headless checks) otherwise show a dead player.
+- Super-admin membership is manually provisioned separately and checked by database functions; account suspension cannot target admins. Why: client controls and signup email cannot confer management authority.
+- MT5 setup records contain only non-secret broker/server/account details and never establish a connection or bypass subscription entitlement. Why: no secure execution bridge is configured.
+- Public membership metrics expose aggregate counts only; never fabricate growth or connection telemetry. Why: preserve privacy and truthful activity reporting.

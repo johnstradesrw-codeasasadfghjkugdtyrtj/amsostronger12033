@@ -45,7 +45,7 @@ function DashboardLayout() {
               <i.icon className="h-4 w-4" />{i.label}
             </Link>
           ))}
-          <Link to="/dashboard/mt5" className={linkCls} activeProps={{ className: "bg-sidebar-accent text-primary" }}><Link2 className="h-4 w-4" />Connect MT5</Link>
+          <Button asChild className="my-3 justify-start"><Link to="/dashboard/mt5"><Link2 className="h-4 w-4" />Connect MT5</Link></Button>
           <Link to="/resources" className={linkCls}><LifeBuoy className="h-4 w-4" />Resources & Guides</Link>
           <Link to="/dashboard/subscription" className={linkCls}><Receipt className="h-4 w-4" />My Subscription</Link>
           <a href={ACCOUNT_MGMT_URL} target="_blank" rel="noreferrer" className={linkCls}><Users className="h-4 w-4" />Account Management</a>

@@ -64,6 +64,41 @@ export type Database = {
         }
         Relationships: []
       }
+      mt5_setup_requests: {
+        Row: {
+          account_number: string
+          broker: string
+          created_at: string
+          id: string
+          server: string
+          user_id: string
+        }
+        Insert: {
+          account_number: string
+          broker: string
+          created_at?: string
+          id?: string
+          server: string
+          user_id: string
+        }
+        Update: {
+          account_number?: string
+          broker?: string
+          created_at?: string
+          id?: string
+          server?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mt5_setup_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payment_methods: {
         Row: {
           address: string | null
@@ -322,6 +357,29 @@ export type Database = {
           },
         ]
       }
+      super_admin_members: {
+        Row: {
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "super_admin_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -353,6 +411,12 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_super_admin: { Args: never; Returns: boolean }
+      manage_account_access: {
+        Args: { _reason: string; _suspended: boolean; _user_id: string }
+        Returns: undefined
+      }
+      registered_user_total: { Args: never; Returns: number }
       review_payment: {
         Args: { _approve: boolean; _payment_id: string; _reason?: string }
         Returns: undefined

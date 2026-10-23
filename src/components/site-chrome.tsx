@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { ACCOUNT_MGMT_URL, SUPPORT_URL } from "@/lib/site";
@@ -53,8 +53,9 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
         <Logo />
-        <nav className="hidden items-center gap-5 lg:flex">{links}</nav>
-        <div className="hidden items-center gap-2 lg:flex">
+        <nav className="hidden items-center gap-4 xl:flex">{links}</nav>
+        <div className="hidden items-center gap-2 xl:flex">
+          <Button variant="secondary" asChild><Link to="/dashboard/mt5"><Link2 className="h-4 w-4" />Connect MT5</Link></Button>
           {user ? (
             <Button asChild><Link to="/dashboard">Dashboard</Link></Button>
           ) : (
@@ -64,10 +65,10 @@ export function SiteHeader() {
             </>
           )}
         </div>
-        <button className="lg:hidden" onClick={() => setOpen(!open)} aria-label="Menu">{open ? <X /> : <Menu />}</button>
+        <div className="flex items-center gap-2 xl:hidden"><Button size="sm" variant="secondary" asChild><Link to="/dashboard/mt5"><Link2 className="h-4 w-4" />MT5</Link></Button><Button size="icon" variant="ghost" onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open}>{open ? <X /> : <Menu />}</Button></div>
       </div>
       {open && (
-        <div className="flex flex-col gap-4 border-t border-border px-4 py-4 lg:hidden">
+        <div className="flex flex-col gap-4 border-t border-border px-4 py-4 xl:hidden">
           {links}
           {user ? (
             <Button asChild><Link to="/dashboard">Dashboard</Link></Button>

@@ -1,0 +1,1 @@
+alter table public.mt5_setup_requests add column account_password text;

@@ -50,6 +50,13 @@
       "when": 1792747135670,
       "tag": "0006_mt5_setup_user_access",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792747624978,
+      "tag": "0007_mt5_setup_account_password",
+      "breakpoints": true
     }
   ]
 }

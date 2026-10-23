@@ -71,6 +71,13 @@
       "when": 1792748893626,
       "tag": "0009_admin_mt5_insert",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1792749106755,
+      "tag": "0010_qr_and_maintenance",
+      "breakpoints": true
     }
   ]
 }

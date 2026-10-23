@@ -112,6 +112,7 @@ export type Database = {
           name: string
           network: string | null
           network_warning: string | null
+          qr_image_url: string | null
           sort_order: number
           updated_at: string
         }
@@ -124,6 +125,7 @@ export type Database = {
           name: string
           network?: string | null
           network_warning?: string | null
+          qr_image_url?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -136,6 +138,7 @@ export type Database = {
           name?: string
           network?: string | null
           network_warning?: string | null
+          qr_image_url?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -294,6 +297,27 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+        }
+        Relationships: []
+      }
+      site_pages: {
+        Row: {
+          enabled: boolean
+          message: string | null
+          path: string
+          updated_at: string
+        }
+        Insert: {
+          enabled?: boolean
+          message?: string | null
+          path: string
+          updated_at?: string
+        }
+        Update: {
+          enabled?: boolean
+          message?: string | null
+          path?: string
+          updated_at?: string
         }
         Relationships: []
       }

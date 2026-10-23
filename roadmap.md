@@ -1,5 +1,8 @@
 # Roadmap
 
+- [ ] Present supplied homepage figures as owner-reported, separate from live account status.
+- [ ] Improve dashboard subscription discovery and verify plan navigation.
+
 - [x] Add owner-only user management and real user totals.
 - [x] Feature MT5 setup, subscription locks and honest homepage status.
 - [x] Polish public and signed-in pages; verify mobile overflow, normal-user lock and admin denial.

@@ -23,7 +23,7 @@ function Mt5() {
   return (
     <div>
       <PageHead title="Connect MT5" />
-      <Mt5Setup planName={data.entitlement.plan_name} mt5Limit={data.entitlement.mt5_limit} />
+      <Mt5Setup planName={data.entitlement.plan_name ?? null} mt5Limit={data.entitlement.mt5_limit ?? 1} />
     </div>
   );
 }

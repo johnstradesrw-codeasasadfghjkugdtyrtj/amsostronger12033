@@ -1,5 +1,9 @@
 # Roadmap
 
+- [ ] Add owner-only user management and real user totals.
+- [ ] Feature MT5 setup, subscription locks and honest homepage status.
+- [ ] Polish public and signed-in pages across screen sizes and verify flows.
+
 - [x] Enforce server-side subscription, suspension, approval and plan entitlements.
 - [x] Show truthful MT5/bot locks and restore registered-user resources.
 - [x] Repair direct routes, safe login return paths and admin deep links.

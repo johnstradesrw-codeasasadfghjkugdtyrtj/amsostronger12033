@@ -6,7 +6,8 @@ describe('Subscription feature rules', () => {
  for (const status of ['none','pending','expired','revoked','suspended','scheduled'] as const) it(`${status} never grants MT5 access`, () => { expect(permitsFeature({ ...active, status, allowed: false },'mt5')).toBe(false); });
  it('active approved access permits the included MT5 account', () => expect(permitsFeature(active,'mt5')).toBe(true));
  it('no MT5 allowance denies MT5 access', () => expect(permitsFeature({...active,mt5_limit:0},'mt5')).toBe(false));
- it('MT5 subscription alone cannot grant bot execution', () => expect(permitsFeature(active,'bot')).toBe(false));
+ it('any active subscription opens the bot page', () => expect(permitsFeature(active,'bot')).toBe(true));
+ it('expired subscription cannot open the bot', () => expect(permitsFeature({...active,status:'expired'},'bot')).toBe(false));
  it('bot execution requires an explicit included feature', () => expect(permitsFeature({...active,features:['Bot execution']},'bot')).toBe(true));
  it('premium trading requires an explicit included feature', () => expect(permitsFeature(active,'premium')).toBe(false));
 });

@@ -1,0 +1,25 @@
+CREATE TABLE public.super_admin_members (user_id uuid PRIMARY KEY REFERENCES public.profiles(id), created_at timestamptz NOT NULL DEFAULT now());
+GRANT SELECT ON public.super_admin_members TO authenticated;
+GRANT ALL ON public.super_admin_members TO service_role;
+ALTER TABLE public.super_admin_members ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "own super admin membership" ON public.super_admin_members FOR SELECT TO authenticated USING (user_id=auth.uid());
+CREATE OR REPLACE FUNCTION public.is_super_admin() RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path=public AS $$ SELECT public.has_role(auth.uid(),'admin') AND EXISTS(SELECT 1 FROM public.super_admin_members WHERE user_id=auth.uid()); $$;
+GRANT EXECUTE ON FUNCTION public.is_super_admin() TO authenticated;
+REVOKE EXECUTE ON FUNCTION public.is_super_admin() FROM PUBLIC,anon;
+CREATE OR REPLACE FUNCTION public.manage_account_access(_user_id uuid,_suspended boolean,_reason text) RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$ BEGIN
+IF NOT public.is_super_admin() THEN RAISE EXCEPTION 'Forbidden'; END IF;
+IF public.has_role(_user_id,'admin') THEN RAISE EXCEPTION 'Administrator accounts cannot be suspended here'; END IF;
+IF NOT EXISTS(SELECT 1 FROM public.profiles WHERE id=_user_id) THEN RAISE EXCEPTION 'Account not found'; END IF;
+INSERT INTO public.account_access(user_id,suspended,reason) VALUES(_user_id,_suspended,left(_reason,500)) ON CONFLICT(user_id) DO UPDATE SET suspended=EXCLUDED.suspended,reason=EXCLUDED.reason;
+INSERT INTO public.admin_audit(actor,action,details) VALUES(auth.uid(),'account_access_update',jsonb_build_object('user_id',_user_id,'suspended',_suspended,'reason',left(_reason,500)));
+END; $$;
+REVOKE EXECUTE ON FUNCTION public.manage_account_access(uuid,boolean,text) FROM PUBLIC,anon;
+GRANT EXECUTE ON FUNCTION public.manage_account_access(uuid,boolean,text) TO authenticated;
+CREATE TABLE public.mt5_setup_requests (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), user_id uuid NOT NULL REFERENCES public.profiles(id), broker text NOT NULL, server text NOT NULL, account_number text NOT NULL, created_at timestamptz NOT NULL DEFAULT now());
+GRANT SELECT,INSERT,DELETE ON public.mt5_setup_requests TO authenticated;
+GRANT ALL ON public.mt5_setup_requests TO service_role;
+ALTER TABLE public.mt5_setup_requests ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "admin mt5 setup read" ON public.mt5_setup_requests FOR SELECT TO authenticated USING(public.has_role(auth.uid(),'admin'));
+CREATE POLICY "admin mt5 setup insert" ON public.mt5_setup_requests FOR INSERT TO authenticated WITH CHECK(user_id=auth.uid() AND public.has_role(auth.uid(),'admin'));
+CREATE POLICY "admin mt5 setup delete" ON public.mt5_setup_requests FOR DELETE TO authenticated USING(user_id=auth.uid() AND public.has_role(auth.uid(),'admin'));
+COMMENT ON TABLE public.mt5_setup_requests IS 'Non-secret admin setup details only. Does not connect MT5 or authorize trading. Passwords must never be stored here.';

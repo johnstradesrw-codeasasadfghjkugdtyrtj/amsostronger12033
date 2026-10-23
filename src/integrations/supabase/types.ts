@@ -416,6 +416,7 @@ export type Database = {
         Args: { _reason: string; _suspended: boolean; _user_id: string }
         Returns: undefined
       }
+      registered_user_total: { Args: never; Returns: number }
       review_payment: {
         Args: { _approve: boolean; _payment_id: string; _reason?: string }
         Returns: undefined

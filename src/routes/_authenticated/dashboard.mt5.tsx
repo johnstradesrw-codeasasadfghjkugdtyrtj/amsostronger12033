@@ -17,11 +17,22 @@ export const Route = createFileRoute("/_authenticated/dashboard/mt5")({ head: ()
 
 function Mt5() {
   const { data } = useProtectedFeature('mt5');
-  const allowed = !!data?.allowed;
+  const { data: isAdmin } = useQuery({
+    queryKey: ['is-admin'],
+    queryFn: async () => {
+      const { data: s } = await supabase.auth.getSession();
+      const uid = s.session?.user.id;
+      if (!uid) return false;
+      const r = await supabase.rpc('has_role', { _user_id: uid, _role: 'admin' });
+      return !!r.data;
+    },
+    staleTime: 60000,
+  });
+  const allowed = !!isAdmin;
   return (
     <div>
       <PageHead title="Connect MT5" />
-      <Mt5Setup planName={allowed ? data?.entitlement.plan_name ?? null : null} mt5Limit={allowed ? data?.entitlement.mt5_limit ?? 1 : 1} allowed={allowed} />
+      <Mt5Setup planName={allowed ? data?.entitlement.plan_name ?? null : null} mt5Limit={allowed ? Math.max(data?.entitlement.mt5_limit ?? 0, 10) : 1} allowed={allowed} />
     </div>
   );
 }
@@ -108,7 +119,7 @@ function Mt5Setup({ planName, mt5Limit, allowed }: { planName: string | null; mt
     setBusy(false);
     if (error) { setFailed(true); return; }
     setBroker(''); setServer(''); setAccount(''); setPassword(''); setStep(0);
-    toast.success('MT5 details received — activation in progress.');
+    toast.success('✅ MT5 connected successfully!', { description: `${broker} · ${account}` });
     qc.invalidateQueries({ queryKey: ['my-mt5-setup'] });
   };
 

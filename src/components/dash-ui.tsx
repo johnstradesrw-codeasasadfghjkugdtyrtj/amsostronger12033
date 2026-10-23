@@ -15,8 +15,8 @@ export function PageHead({ title, sub }: { title: string; sub?: string }) {
 
 export function Card({ title, children }: { title?: string; children: ReactNode }) {
   return (
-    <div className="rounded-2xl border border-border bg-card p-5">
-      {title && <p className="mb-2 text-xs uppercase tracking-wider text-muted-foreground">{title}</p>}
+    <div className="rounded-2xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md">
+      {title && <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-primary">{title}</p>}
       {children}
     </div>
   );

@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PageHead, Card } from "@/components/dash-ui";
 import { useProtectedFeature } from '@/hooks/use-entitlement';
-import { SubscriptionLock } from '@/components/subscription-lock';
 import { pageHead } from '@/lib/metadata';
 import { supabase } from '@/integrations/supabase/client';
 import { BROKERS, searchBrokers } from '@/lib/brokers';

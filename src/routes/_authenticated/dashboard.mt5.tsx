@@ -17,14 +17,12 @@ import { toast } from 'sonner';
 export const Route = createFileRoute("/_authenticated/dashboard/mt5")({ head: () => pageHead('Connect MT5','Secure subscription-based MT5 account access.'), component: Mt5 });
 
 function Mt5() {
-  const { data, isLoading, error } = useProtectedFeature('mt5');
-  if (isLoading) return <p role="status">Checking subscription access…</p>;
-  if (error || !data) return <p role="alert">Unable to verify access. Please try again or contact support.</p>;
-  if (!data.allowed) return <SubscriptionLock entitlement={data.entitlement} />;
+  const { data } = useProtectedFeature('mt5');
+  const allowed = !!data?.allowed;
   return (
     <div>
       <PageHead title="Connect MT5" />
-      <Mt5Setup planName={data.entitlement.plan_name ?? null} mt5Limit={data.entitlement.mt5_limit ?? 1} />
+      <Mt5Setup planName={allowed ? data?.entitlement.plan_name ?? null : null} mt5Limit={allowed ? data?.entitlement.mt5_limit ?? 1 : 1} allowed={allowed} />
     </div>
   );
 }
@@ -72,7 +70,7 @@ function BrokerPicker({ value, onChange }: { value: string; onChange: (v: string
   );
 }
 
-function Mt5Setup({ planName, mt5Limit }: { planName: string | null; mt5Limit: number }) {
+function Mt5Setup({ planName, mt5Limit, allowed }: { planName: string | null; mt5Limit: number; allowed: boolean }) {
   const qc = useQueryClient();
   const [broker, setBroker] = useState('');
   const [server, setServer] = useState('');
@@ -94,6 +92,7 @@ function Mt5Setup({ planName, mt5Limit }: { planName: string | null; mt5Limit: n
 
   const save = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!allowed) { toast.error('No active subscription. Please subscribe to connect MT5.'); return; }
     setBusy(true);
     const { data: s } = await supabase.auth.getSession();
     const uid = s.session?.user.id;
@@ -101,7 +100,7 @@ function Mt5Setup({ planName, mt5Limit }: { planName: string | null; mt5Limit: n
       ? await supabase.from('mt5_setup_requests').insert({ user_id: uid, broker: broker.trim(), server: server.trim(), account_number: account.trim(), account_password: password })
       : { error: new Error('Please sign in.') };
     setBusy(false);
-    if (error) { toast.error('Unable to save your MT5 details. Please try again.'); return; }
+    if (error) { toast.error('No active subscription. Please subscribe to connect MT5.'); return; }
     setBroker(''); setServer(''); setAccount(''); setPassword('');
     toast.success('MT5 details received — activation in progress.');
     qc.invalidateQueries({ queryKey: ['my-mt5-setup'] });
@@ -116,7 +115,7 @@ function Mt5Setup({ planName, mt5Limit }: { planName: string | null; mt5Limit: n
   return (
     <div className="space-y-4">
       <Card title="MT5 account setup">
-        <p className="mb-3 font-semibold">{planName} · Up to {mt5Limit} MT5 account{mt5Limit === 1 ? '' : 's'}</p>
+        {planName && <p className="mb-3 font-semibold">{planName} · Up to {mt5Limit} MT5 account{mt5Limit === 1 ? '' : 's'}</p>}
         <Badge className="gap-1"><CheckCircle2 className="h-3.5 w-3.5" />Setup available</Badge>
         <p className="mt-3 text-sm text-muted-foreground">
           Pick your broker, then enter your MT5 server, account number and password. Our team completes the secure activation on our side.

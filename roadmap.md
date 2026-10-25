@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Add admin-selected homepage video/photo, combined bot creation/file publishing, 5 MB thumbnails, refined dimensions/color and email support; verify.
+
 - [x] Build independent Forex Trading Bot marketplace, admin listings, private delivery, manual checkout, customer orders and announcement.
 - [x] Verify marketplace upload, purchase, manual approval, private download, refund revocation, blocked client writes, announcement and mobile layout end-to-end; 44 tests pass.
 

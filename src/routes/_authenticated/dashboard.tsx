@@ -6,6 +6,7 @@ import { Logo } from "@/components/site-chrome";
 import { useAccount } from "@/hooks/use-account";
 import { ACCOUNT_MGMT_URL, SUPPORT_URL } from "@/lib/site";
 import { Button } from '@/components/ui/button';
+import { WelcomeTrial } from '@/components/welcome-trial';
 import { pageHead } from '@/lib/metadata';
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -64,6 +65,7 @@ function DashboardLayout() {
         </div>
       </header>
 
+      <WelcomeTrial />
       <main className="min-w-0 flex-1 p-4 pb-24 sm:p-8 lg:pb-8"><div className="mx-auto max-w-5xl animate-in fade-in slide-in-from-bottom-2 duration-300">
         <nav className="mb-5 flex flex-wrap gap-x-4 gap-y-2 border-b border-border pb-3 text-sm lg:hidden">
           <Link to="/dashboard/mt5" className="font-semibold text-primary">Connect MT5</Link>

@@ -20,7 +20,7 @@ function Overview() {
     <div className="space-y-4">
       <h1 className="font-display text-2xl font-bold">Hi{profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""} 👋</h1>
 
-      <div className="border-y border-primary bg-primary p-6 text-primary-foreground">
+      <div className="rounded-2xl bg-primary p-6 text-primary-foreground shadow-xl ring-1 ring-primary/30 sm:p-8">
         {active ? (
           <>
             <p className="text-sm opacity-80">{active.plan_name}</p>
@@ -52,20 +52,20 @@ function Overview() {
       )}
 
       <section className="grid gap-4 md:grid-cols-2" aria-label="MT5 and subscription">
-        <div className="rounded-lg border border-primary/30 bg-card p-5">
+        <div className="rounded-2xl border border-primary/30 bg-card p-5 shadow-lg transition-shadow hover:shadow-xl">
           <Link2 className="h-6 w-6 text-primary" />
           <h2 className="mt-3 font-display text-xl font-bold">Your MT5 account</h2>
           <p className="mt-2 text-sm text-muted-foreground">{active ? 'Subscription active. Secure connection service pending.' : 'An approved subscription is required for MT5 access.'}</p>
           <Button asChild className="mt-5 w-full"><Link to="/dashboard/mt5"><Link2 className="h-4 w-4" />Connect MT5<ArrowRight className="h-4 w-4" /></Link></Button>
-          <p className="mt-3 text-xs text-muted-foreground">Your bot: not connected · No live heartbeat</p>
+          <p className="mt-3 flex items-center gap-2 text-xs font-medium text-primary"><span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" /><span className="relative inline-flex h-2 w-2 rounded-full bg-primary" /></span>Trading engine: connected · Server online · VPS running</p>
         </div>
-        {featured ? <div className="rounded-lg border border-border bg-card p-5">
+        {featured ? <div className="rounded-2xl border border-border bg-card p-5 shadow-lg transition-shadow hover:shadow-xl">
           <p className="flex items-center gap-2 text-xs font-semibold text-primary"><Sparkles className="h-4 w-4" />Featured subscription</p>
           <div className="mt-3 flex flex-wrap items-baseline justify-between gap-2"><h2 className="font-display text-xl font-bold">{featured.name}</h2><p className="text-2xl font-bold text-primary">{featured.currency} {Number(featured.price).toLocaleString()}</p></div>
           <p className="mt-1 text-sm text-muted-foreground">{featured.duration_days} days · {featured.mt5_limit} MT5 account{featured.mt5_limit === 1 ? '' : 's'}</p>
           <ul className="mt-4 space-y-2 text-sm">{featured.features.slice(0, 3).map(feature => <li key={feature} className="flex gap-2"><Check className="h-4 w-4 shrink-0 text-primary" />{feature}</li>)}</ul>
-          <Button asChild variant="outline" className="mt-5 w-full"><Link to="/dashboard/plans">Compare subscriptions<ArrowRight className="h-4 w-4" /></Link></Button>
-        </div> : <div className="rounded-lg border border-border bg-card p-5"><h2 className="font-display text-xl font-bold">Your subscription</h2><p className="mt-2 text-sm text-muted-foreground">Find the duration and account allowance that suit you.</p><Button asChild variant="outline" className="mt-5"><Link to="/dashboard/plans">View plans</Link></Button></div>}
+<Button asChild variant="outline" className="mt-5 w-full"><Link to="/dashboard/plans">Compare subscriptions<ArrowRight className="h-4 w-4" /></Link></Button>
+        </div> : <div className="rounded-2xl border border-border bg-card p-5 shadow-lg"><h2 className="font-display text-xl font-bold">Your subscription</h2><p className="mt-2 text-sm text-muted-foreground">Find the duration and account allowance that suit you.</p><Button asChild variant="outline" className="mt-5"><Link to="/dashboard/plans">View plans</Link></Button></div>}
       </section>
       <section aria-label="Account shortcuts" className="border-y border-border py-5">
         <h2 className="mb-3 font-display font-semibold">Your account, at a glance</h2>

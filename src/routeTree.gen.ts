@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as FeaturesRouteImport } from './routes/features'
+import { Route as GetBotFileRouteImport } from './routes/get-bot-file'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PricingRouteImport } from './routes/pricing'
@@ -22,6 +23,8 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedResourcesRouteImport } from './routes/_authenticated/resources'
+import { Route as GetBotFileIndexRouteImport } from './routes/get-bot-file.index'
+import { Route as GetBotFileProductIdRouteImport } from './routes/get-bot-file.$productId'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedDashboardAccountManagementRouteImport } from './routes/_authenticated/dashboard.account-management'
 import { Route as AuthenticatedDashboardBotRouteImport } from './routes/_authenticated/dashboard.bot'
@@ -57,6 +60,11 @@ const FaqRoute = FaqRouteImport.update({
 const FeaturesRoute = FeaturesRouteImport.update({
   id: '/features',
   path: '/features',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GetBotFileRoute = GetBotFileRouteImport.update({
+  id: '/get-bot-file',
+  path: '/get-bot-file',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HowItWorksRoute = HowItWorksRouteImport.update({
@@ -98,6 +106,16 @@ const AuthenticatedResourcesRoute = AuthenticatedResourcesRouteImport.update({
   id: '/resources',
   path: '/resources',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const GetBotFileIndexRoute = GetBotFileIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => GetBotFileRoute,
+} as any)
+const GetBotFileProductIdRoute = GetBotFileProductIdRouteImport.update({
+  id: '/$productId',
+  path: '/$productId',
+  getParentRoute: () => GetBotFileRoute,
 } as any)
 const AuthenticatedDashboardIndexRoute =
   AuthenticatedDashboardIndexRouteImport.update({
@@ -176,6 +194,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/get-bot-file': typeof GetBotFileRouteWithChildren
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
@@ -184,6 +203,8 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AuthenticatedAdminRoute
   '/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/resources': typeof AuthenticatedResourcesRoute
+  '/get-bot-file/$productId': typeof GetBotFileProductIdRoute
+  '/get-bot-file/': typeof GetBotFileIndexRoute
   '/dashboard/account-management': typeof AuthenticatedDashboardAccountManagementRoute
   '/dashboard/bot': typeof AuthenticatedDashboardBotRoute
   '/dashboard/connect-mt5': typeof AuthenticatedDashboardConnectMt5Route
@@ -209,6 +230,8 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/resources': typeof AuthenticatedResourcesRoute
+  '/get-bot-file/$productId': typeof GetBotFileProductIdRoute
+  '/get-bot-file': typeof GetBotFileIndexRoute
   '/dashboard/account-management': typeof AuthenticatedDashboardAccountManagementRoute
   '/dashboard/bot': typeof AuthenticatedDashboardBotRoute
   '/dashboard/connect-mt5': typeof AuthenticatedDashboardConnectMt5Route
@@ -229,6 +252,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
   '/features': typeof FeaturesRoute
+  '/get-bot-file': typeof GetBotFileRouteWithChildren
   '/how-it-works': typeof HowItWorksRoute
   '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
@@ -237,6 +261,8 @@ export interface FileRoutesById {
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRouteWithChildren
   '/_authenticated/resources': typeof AuthenticatedResourcesRoute
+  '/get-bot-file/$productId': typeof GetBotFileProductIdRoute
+  '/get-bot-file/': typeof GetBotFileIndexRoute
   '/_authenticated/dashboard/account-management': typeof AuthenticatedDashboardAccountManagementRoute
   '/_authenticated/dashboard/bot': typeof AuthenticatedDashboardBotRoute
   '/_authenticated/dashboard/connect-mt5': typeof AuthenticatedDashboardConnectMt5Route
@@ -257,6 +283,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/faq'
     | '/features'
+    | '/get-bot-file'
     | '/how-it-works'
     | '/login'
     | '/pricing'
@@ -265,6 +292,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/dashboard'
     | '/resources'
+    | '/get-bot-file/$productId'
+    | '/get-bot-file/'
     | '/dashboard/account-management'
     | '/dashboard/bot'
     | '/dashboard/connect-mt5'
@@ -290,6 +319,8 @@ export interface FileRouteTypes {
     | '/signup'
     | '/admin'
     | '/resources'
+    | '/get-bot-file/$productId'
+    | '/get-bot-file'
     | '/dashboard/account-management'
     | '/dashboard/bot'
     | '/dashboard/connect-mt5'
@@ -309,6 +340,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/faq'
     | '/features'
+    | '/get-bot-file'
     | '/how-it-works'
     | '/login'
     | '/pricing'
@@ -317,6 +349,8 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/dashboard'
     | '/_authenticated/resources'
+    | '/get-bot-file/$productId'
+    | '/get-bot-file/'
     | '/_authenticated/dashboard/account-management'
     | '/_authenticated/dashboard/bot'
     | '/_authenticated/dashboard/connect-mt5'
@@ -337,6 +371,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   FaqRoute: typeof FaqRoute
   FeaturesRoute: typeof FeaturesRoute
+  GetBotFileRoute: typeof GetBotFileRouteWithChildren
   HowItWorksRoute: typeof HowItWorksRoute
   LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
@@ -380,6 +415,13 @@ declare module '@tanstack/react-router' {
       path: '/features'
       fullPath: '/features'
       preLoaderRoute: typeof FeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/get-bot-file': {
+      id: '/get-bot-file'
+      path: '/get-bot-file'
+      fullPath: '/get-bot-file'
+      preLoaderRoute: typeof GetBotFileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/how-it-works': {
@@ -437,6 +479,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/resources'
       preLoaderRoute: typeof AuthenticatedResourcesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/get-bot-file/': {
+      id: '/get-bot-file/'
+      path: '/'
+      fullPath: '/get-bot-file/'
+      preLoaderRoute: typeof GetBotFileIndexRouteImport
+      parentRoute: typeof GetBotFileRoute
+    }
+    '/get-bot-file/$productId': {
+      id: '/get-bot-file/$productId'
+      path: '/$productId'
+      fullPath: '/get-bot-file/$productId'
+      preLoaderRoute: typeof GetBotFileProductIdRouteImport
+      parentRoute: typeof GetBotFileRoute
     }
     '/_authenticated/dashboard/': {
       id: '/_authenticated/dashboard/'
@@ -577,12 +633,27 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface GetBotFileRouteChildren {
+  GetBotFileProductIdRoute: typeof GetBotFileProductIdRoute
+  GetBotFileIndexRoute: typeof GetBotFileIndexRoute
+}
+
+const GetBotFileRouteChildren: GetBotFileRouteChildren = {
+  GetBotFileProductIdRoute: GetBotFileProductIdRoute,
+  GetBotFileIndexRoute: GetBotFileIndexRoute,
+}
+
+const GetBotFileRouteWithChildren = GetBotFileRoute._addFileChildren(
+  GetBotFileRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   FaqRoute: FaqRoute,
   FeaturesRoute: FeaturesRoute,
+  GetBotFileRoute: GetBotFileRouteWithChildren,
   HowItWorksRoute: HowItWorksRoute,
   LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,

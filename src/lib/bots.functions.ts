@@ -6,11 +6,11 @@ import { validBotFile, defaultAnnouncement } from './bot-rules';
 import type { Database } from '@/integrations/supabase/types';
 
 export const getBotCatalog = createServerFn({ method: 'GET' }).handler(async () => {
-  const url = process.env['SUPABASE_URL']; const key = process.env['SUPABASE_PUBLISHABLE_KEY'];
-  if (!url || !key) throw new Error('Marketplace unavailable.');
+  const url = process.env['SUPABASE_URL'] || import.meta.env['VITE_SUPABASE_URL']; const key = process.env['SUPABASE_PUBLISHABLE_KEY'] || import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'];
+  if (!url || !key) { console.error('Marketplace env missing'); return { products: [], announcement: defaultAnnouncement }; }
   const client = createClient<Database>(url,key,{ auth:{persistSession:false,autoRefreshToken:false},global:{fetch:(input,init)=>{const h=new Headers(init?.headers); if(key.startsWith('sb_') && h.get('Authorization')===`Bearer ${key}`) h.delete('Authorization');h.set('apikey',key);return fetch(input,{...init,headers:h});}} });
   const [products,announcement] = await Promise.all([client.from('bot_products').select('*').eq('published',true).eq('deleted',false).order('created_at',{ascending:false}),client.from('bot_announcement').select('*').maybeSingle()]);
-  if(products.error || announcement.error) throw new Error('Unable to load the marketplace.');
+  if(products.error) console.error('Marketplace load failed', products.error.message);
   return { products:products.data ?? [], announcement:announcement.data ?? defaultAnnouncement };
 });
 

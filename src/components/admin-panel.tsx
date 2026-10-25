@@ -44,6 +44,7 @@ export function Admin({ section = "payments" }: { section?: string }) {
           <TabsTrigger value="plans">Plans</TabsTrigger>
           <TabsTrigger value="methods">Payment methods</TabsTrigger>
           <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
+          <TabsTrigger value="media">Media</TabsTrigger>
         </TabsList>
         <TabsContent value="users"><AdminUsers /></TabsContent>
         <TabsContent value="mt5"><AdminMt5 uid={data.user.id} /></TabsContent>

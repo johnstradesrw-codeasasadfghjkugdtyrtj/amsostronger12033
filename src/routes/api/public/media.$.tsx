@@ -9,7 +9,7 @@ import { createFileRoute } from "@tanstack/react-router";
  * project's stable Lovable host. Only well-formed asset ids and filenames are
  * accepted; everything else gets a 400/404.
  */
-const LOVABLE_HOST = "https://giue56w4tryuiougfyd.lovable.app";
+const LOVABLE_HOST = "https://project--28edcb30-96f0-4571-8ab5-95bc9fb7aa6a.lovable.app";
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const FILE_RE = /^[A-Za-z0-9._-]{1,120}$/;
 

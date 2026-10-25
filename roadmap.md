@@ -1,5 +1,8 @@
 # Roadmap
 
+- [ ] Build independent Forex Trading Bot marketplace, admin listings, private delivery, manual checkout, customer orders and announcement.
+- [ ] Verify marketplace purchase, authorization and subscription isolation end-to-end.
+
 - [x] Add admin video/photo uploads (private site-media bucket, admin Media tab).
 - [x] Automatically reject undecided manual payments after 10 minutes (pg_cron every 5 min, reason "Payment not received!").
 

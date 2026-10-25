@@ -14,6 +14,7 @@ import proof3 from "@/assets/bot-proof-image-3.jpg.asset.json";
 import proof4 from "@/assets/bot-proof-image-4.jpg.asset.json";
 import { PlatformStatus } from '@/components/platform-status';
 import { BROKERS } from '@/lib/brokers';
+import { BotHomepage } from '@/components/bot-marketplace';
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -329,6 +330,7 @@ function Index() {
       </section>
 
       <PlatformStatus />
+      <BotHomepage />
       <ConnectMt5Cta />
       <BrokersSection />
       <BotAlbum />

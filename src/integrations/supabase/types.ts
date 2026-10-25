@@ -64,6 +64,351 @@ export type Database = {
         }
         Relationships: []
       }
+      bot_announcement: {
+        Row: {
+          destination: string
+          enabled: boolean
+          heading: string
+          id: boolean
+          message: string
+        }
+        Insert: {
+          destination?: string
+          enabled?: boolean
+          heading?: string
+          id?: boolean
+          message?: string
+        }
+        Update: {
+          destination?: string
+          enabled?: boolean
+          heading?: string
+          id?: boolean
+          message?: string
+        }
+        Relationships: []
+      }
+      bot_audit: {
+        Row: {
+          action: string
+          actor: string | null
+          created_at: string
+          details: Json | null
+          id: string
+        }
+        Insert: {
+          action: string
+          actor?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+        }
+        Update: {
+          action?: string
+          actor?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+        }
+        Relationships: []
+      }
+      bot_download_logs: {
+        Row: {
+          created_at: string
+          id: string
+          order_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          order_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          order_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bot_download_logs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "bot_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bot_entitlements: {
+        Row: {
+          granted_at: string
+          order_id: string
+          product_id: string
+          revoked: boolean
+          user_id: string
+        }
+        Insert: {
+          granted_at?: string
+          order_id: string
+          product_id: string
+          revoked?: boolean
+          user_id: string
+        }
+        Update: {
+          granted_at?: string
+          order_id?: string
+          product_id?: string
+          revoked?: boolean
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bot_entitlements_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "bot_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bot_entitlements_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "bot_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bot_file_metadata: {
+        Row: {
+          content_type: string
+          filename: string
+          path: string
+          product_id: string
+          size_bytes: number
+          uploaded_at: string
+        }
+        Insert: {
+          content_type: string
+          filename: string
+          path: string
+          product_id: string
+          size_bytes: number
+          uploaded_at?: string
+        }
+        Update: {
+          content_type?: string
+          filename?: string
+          path?: string
+          product_id?: string
+          size_bytes?: number
+          uploaded_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bot_file_metadata_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: true
+            referencedRelation: "bot_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bot_orders: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          paid_at: string | null
+          product_id: string
+          product_name: string
+          reason: string | null
+          reference: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          id?: string
+          paid_at?: string | null
+          product_id: string
+          product_name: string
+          reason?: string | null
+          reference?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          paid_at?: string | null
+          product_id?: string
+          product_name?: string
+          reason?: string | null
+          reference?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bot_orders_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "bot_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bot_payment_submissions: {
+        Row: {
+          id: string
+          method_id: string
+          method_name: string
+          order_id: string
+          proof_path: string | null
+          submitted_at: string
+          transaction_reference: string
+        }
+        Insert: {
+          id?: string
+          method_id: string
+          method_name: string
+          order_id: string
+          proof_path?: string | null
+          submitted_at?: string
+          transaction_reference: string
+        }
+        Update: {
+          id?: string
+          method_id?: string
+          method_name?: string
+          order_id?: string
+          proof_path?: string | null
+          submitted_at?: string
+          transaction_reference?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bot_payment_submissions_method_id_fkey"
+            columns: ["method_id"]
+            isOneToOne: false
+            referencedRelation: "payment_methods"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bot_payment_submissions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "bot_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bot_products: {
+        Row: {
+          available: boolean
+          category: string
+          created_at: string
+          deleted: boolean
+          description: string
+          download_limit: number
+          features: string[]
+          id: string
+          image_url: string | null
+          instructions: string
+          instruments: string[]
+          name: string
+          platform: string
+          price: number
+          published: boolean
+          requires_subscription: boolean
+          short_description: string
+        }
+        Insert: {
+          available?: boolean
+          category?: string
+          created_at?: string
+          deleted?: boolean
+          description?: string
+          download_limit?: number
+          features?: string[]
+          id?: string
+          image_url?: string | null
+          instructions?: string
+          instruments?: string[]
+          name: string
+          platform?: string
+          price?: number
+          published?: boolean
+          requires_subscription?: boolean
+          short_description?: string
+        }
+        Update: {
+          available?: boolean
+          category?: string
+          created_at?: string
+          deleted?: boolean
+          description?: string
+          download_limit?: number
+          features?: string[]
+          id?: string
+          image_url?: string | null
+          instructions?: string
+          instruments?: string[]
+          name?: string
+          platform?: string
+          price?: number
+          published?: boolean
+          requires_subscription?: boolean
+          short_description?: string
+        }
+        Relationships: []
+      }
+      bot_verified_payments: {
+        Row: {
+          amount: number
+          order_id: string
+          submission_id: string
+          verified_at: string
+          verified_by: string
+        }
+        Insert: {
+          amount: number
+          order_id: string
+          submission_id: string
+          verified_at?: string
+          verified_by: string
+        }
+        Update: {
+          amount?: number
+          order_id?: string
+          submission_id?: string
+          verified_at?: string
+          verified_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bot_verified_payments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "bot_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bot_verified_payments_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "bot_payment_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mt5_setup_requests: {
         Row: {
           account_number: string
@@ -430,6 +775,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      authorize_bot_download: {
+        Args: { _order: string; _user: string }
+        Returns: Json
+      }
+      create_bot_order: { Args: { _product: string }; Returns: string }
       has_active_subscription: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
         Args: {
@@ -444,9 +794,23 @@ export type Database = {
         Returns: undefined
       }
       registered_user_total: { Args: never; Returns: number }
+      reject_stale_bot_payments: { Args: never; Returns: number }
       reject_stale_payments: { Args: never; Returns: number }
+      review_bot_order: {
+        Args: { _order: string; _reason?: string; _status: string }
+        Returns: undefined
+      }
       review_payment: {
         Args: { _approve: boolean; _payment_id: string; _reason?: string }
+        Returns: undefined
+      }
+      submit_bot_payment: {
+        Args: {
+          _method: string
+          _order: string
+          _proof: string
+          _reference: string
+        }
         Returns: undefined
       }
       subscription_entitlement: { Args: never; Returns: Json }

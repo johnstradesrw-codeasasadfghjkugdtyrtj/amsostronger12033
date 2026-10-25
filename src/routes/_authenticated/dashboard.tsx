@@ -49,6 +49,9 @@ function DashboardLayout() {
           <Button asChild className="my-3 justify-start rounded-xl shadow-md"><Link to="/dashboard/mt5"><Link2 className="h-4 w-4" />Connect MT5</Link></Button>
           <Link to="/resources" className={linkCls}><LifeBuoy className="h-4 w-4" />Resources & Guides</Link>
           <Link to="/dashboard/subscription" className={linkCls}><Receipt className="h-4 w-4" />My Subscription</Link>
+          <Link to="/dashboard/bot-files" className={linkCls}><Bot className="h-4 w-4" />My Bot Files 🗃️</Link>
+          <Link to="/dashboard/bot-orders" className={linkCls}><Receipt className="h-4 w-4" />Bot File Orders</Link>
+          <Link to="/get-bot-file" className={linkCls}><Bot className="h-4 w-4" />Forex Bot Marketplace</Link>
           <a href={ACCOUNT_MGMT_URL} target="_blank" rel="noreferrer" className={linkCls}><Users className="h-4 w-4" />Account Management</a>
           <a href={SUPPORT_URL} target="_blank" rel="noreferrer" className={linkCls}><LifeBuoy className="h-4 w-4" />Support</a>
           {data?.isAdmin && <Link to="/admin" className={`${linkCls} text-accent`}><ShieldCheck className="h-4 w-4" />Admin</Link>}
@@ -71,6 +74,8 @@ function DashboardLayout() {
           <Link to="/dashboard/mt5" className="font-semibold text-primary">Connect MT5</Link>
           <Link to="/resources">Resources</Link>
           <Link to="/dashboard/subscription">My Subscription</Link>
+          <Link to="/dashboard/bot-files">My Bot Files 🗃️</Link>
+          <Link to="/dashboard/bot-orders">Bot File Orders</Link>
           <a href={ACCOUNT_MGMT_URL} target="_blank" rel="noreferrer">Account Management</a>
         </nav>
         <Outlet />

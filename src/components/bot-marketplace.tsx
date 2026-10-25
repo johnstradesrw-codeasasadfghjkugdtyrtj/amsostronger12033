@@ -14,7 +14,7 @@ import { useAuth } from '@/hooks/use-auth';
 import type { Tables } from '@/integrations/supabase/types';
 
 export const botCatalogOptions=queryOptions({queryKey:['bot-catalog'],queryFn:()=>getBotCatalog(),staleTime:30000});
-export function BotArt({product}:{product?:Pick<Tables<'bot_products'>,'image_url'|'name'|'platform'>}) {
+export function BotArt({product}:{product?:Pick<Tables<'bot_products'>,'image_url'|'name'|'platform'>|undefined}) {
   return product?.image_url ? <img src={product.image_url} alt={product.name} className="aspect-[4/3] w-full object-cover" /> : <div className="flex aspect-[4/3] items-center justify-center bg-secondary text-primary"><div className="text-center"><Archive className="mx-auto h-16 w-16 stroke-1" /><p className="mt-3 font-display text-sm font-semibold">{product?.platform ?? 'QMAM'} · FOREX</p></div></div>;
 }
 export function BuyBot({product}:{product:Tables<'bot_products'>}) {

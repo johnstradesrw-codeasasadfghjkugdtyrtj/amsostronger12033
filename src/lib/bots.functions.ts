@@ -43,7 +43,7 @@ export const downloadBot = createServerFn({method:'POST'}).middleware([requireSu
   const file=z.object({path:z.string(),filename:z.string()}).parse(r.data);
   const signed=await admin.storage.from('bot-files').createSignedUrl(file.path,60,{download:file.filename});
   if(signed.error) throw new Error('Unable to prepare download.');
-  const browserUrl=import.meta.env.VITE_SUPABASE_URL;
+  const browserUrl=import.meta.env['VITE_SUPABASE_URL'];
   return {url:browserUrl+new URL(signed.data.signedUrl).pathname+new URL(signed.data.signedUrl).search};
 });
 
@@ -79,7 +79,7 @@ export const reviewBotOrder=createServerFn({method:'POST'}).middleware([requireS
   const r=await context.supabase.rpc('review_bot_order',{_order:data.orderId,_status:data.status,_reason:data.reason});if(r.error)throw new Error(r.error.message);return {saved:true};
 });
 export const viewBotProof=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).inputValidator((v:unknown)=>z.object({orderId:z.string().uuid()}).parse(v)).handler(async({data,context})=>{
-  const role=await context.supabase.rpc('has_role',{_user_id:context.userId,_role:'admin'});if(role.error||!role.data)throw new Error('Forbidden');const {supabaseAdmin:admin}=await import('@/integrations/supabase/client.server');const p=await admin.from('bot_payment_submissions').select('proof_path').eq('order_id',data.orderId).single();if(!p.data?.proof_path)throw new Error('No screenshot submitted.');const r=await admin.storage.from('bot-order-proofs').createSignedUrl(p.data.proof_path,60);if(r.error)throw new Error('Unable to open proof.');const u=new URL(r.data.signedUrl);return {url:import.meta.env.VITE_SUPABASE_URL+u.pathname+u.search};
+  const role=await context.supabase.rpc('has_role',{_user_id:context.userId,_role:'admin'});if(role.error||!role.data)throw new Error('Forbidden');const {supabaseAdmin:admin}=await import('@/integrations/supabase/client.server');const p=await admin.from('bot_payment_submissions').select('proof_path').eq('order_id',data.orderId).single();if(!p.data?.proof_path)throw new Error('No screenshot submitted.');const r=await admin.storage.from('bot-order-proofs').createSignedUrl(p.data.proof_path,60);if(r.error)throw new Error('Unable to open proof.');const u=new URL(r.data.signedUrl);return {url:import.meta.env['VITE_SUPABASE_URL']+u.pathname+u.search};
 });
 export const saveBotAnnouncement=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).inputValidator((v:unknown)=>z.object({enabled:z.boolean(),heading:z.string().min(1).max(150),message:z.string().max(1000),destination:z.enum(['/get-bot-file'])}).parse(v)).handler(async({data,context})=>{
   const role=await context.supabase.rpc('has_role',{_user_id:context.userId,_role:'admin'});if(role.error||!role.data)throw new Error('Forbidden');const {supabaseAdmin:admin}=await import('@/integrations/supabase/client.server');const r=await admin.from('bot_announcement').upsert({id:true,...data});if(r.error)throw new Error('Unable to save announcement.');await admin.from('bot_audit').insert({actor:context.userId,action:'announcement_saved',details:{enabled:data.enabled}});return {saved:true};

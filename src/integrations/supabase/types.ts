@@ -409,6 +409,27 @@ export type Database = {
           },
         ]
       }
+      homepage_media_settings: {
+        Row: {
+          id: boolean
+          media_type: string
+          path: string
+          updated_at: string
+        }
+        Insert: {
+          id?: boolean
+          media_type: string
+          path: string
+          updated_at?: string
+        }
+        Update: {
+          id?: boolean
+          media_type?: string
+          path?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       mt5_setup_requests: {
         Row: {
           account_number: string

@@ -1,7 +1,7 @@
 # Roadmap
 
-- [ ] Add admin homepage video/photo uploads and verify public display.
-- [ ] Automatically reject undecided manual payments after 10 minutes and test deadline rules.
+- [x] Add admin video/photo uploads (private site-media bucket, admin Media tab).
+- [x] Automatically reject undecided manual payments after 10 minutes (pg_cron every 5 min, reason "Payment not received!").
 
 - [ ] Present supplied homepage figures as owner-reported, separate from live account status.
 - [ ] Improve dashboard subscription discovery and verify plan navigation.

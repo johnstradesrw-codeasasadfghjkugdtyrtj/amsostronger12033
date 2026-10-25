@@ -17,6 +17,7 @@ import { useAccount, statusLabel } from "@/hooks/use-account";
 import { isSubscriptionActive } from "@/lib/site";
 import { AdminUsers } from '@/components/admin-users';
 import { AdminMt5 } from '@/components/admin-mt5';
+import { AdminBots } from '@/components/admin-bots';
 import { MANAGED_PAGES } from '@/lib/maintenance';
 import { useSitePages } from '@/components/maintenance-gate';
 
@@ -45,6 +46,7 @@ export function Admin({ section = "payments" }: { section?: string }) {
           <TabsTrigger value="methods">Payment methods</TabsTrigger>
           <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
           <TabsTrigger value="media">Media</TabsTrigger>
+          <TabsTrigger value="marketplace">Bot File Marketplace</TabsTrigger>
         </TabsList>
         <TabsContent value="users"><AdminUsers /></TabsContent>
         <TabsContent value="mt5"><AdminMt5 uid={data.user.id} /></TabsContent>
@@ -55,6 +57,7 @@ export function Admin({ section = "payments" }: { section?: string }) {
         <TabsContent value="methods"><MethodsAdmin uid={data.user.id} /></TabsContent>
         <TabsContent value="maintenance"><MaintenanceAdmin /></TabsContent>
         <TabsContent value="media"><AdminMedia uid={data.user.id} /></TabsContent>
+        <TabsContent value="marketplace"><AdminBots /></TabsContent>
       </Tabs>
     </div>
   );

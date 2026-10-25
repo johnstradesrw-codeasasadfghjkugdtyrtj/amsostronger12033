@@ -28,6 +28,8 @@ import { Route as GetBotFileProductIdRouteImport } from './routes/get-bot-file.$
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedDashboardAccountManagementRouteImport } from './routes/_authenticated/dashboard.account-management'
 import { Route as AuthenticatedDashboardBotRouteImport } from './routes/_authenticated/dashboard.bot'
+import { Route as AuthenticatedDashboardBotFilesRouteImport } from './routes/_authenticated/dashboard.bot-files'
+import { Route as AuthenticatedDashboardBotOrdersRouteImport } from './routes/_authenticated/dashboard.bot-orders'
 import { Route as AuthenticatedDashboardConnectMt5RouteImport } from './routes/_authenticated/dashboard.connect-mt5'
 import { Route as AuthenticatedDashboardMt5RouteImport } from './routes/_authenticated/dashboard.mt5'
 import { Route as AuthenticatedDashboardPaymentsRouteImport } from './routes/_authenticated/dashboard.payments'
@@ -35,6 +37,8 @@ import { Route as AuthenticatedDashboardPlansRouteImport } from './routes/_authe
 import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
 import { Route as AuthenticatedDashboardSubscriptionRouteImport } from './routes/_authenticated/dashboard.subscription'
 import { Route as AuthenticatedDashboardSupportRouteImport } from './routes/_authenticated/dashboard.support'
+import { Route as AuthenticatedDashboardBotOrdersIndexRouteImport } from './routes/_authenticated/dashboard.bot-orders.index'
+import { Route as AuthenticatedDashboardBotOrdersOrderIdRouteImport } from './routes/_authenticated/dashboard.bot-orders.$orderId'
 import { Route as AuthenticatedDashboardPayPlanIdRouteImport } from './routes/_authenticated/dashboard.pay.$planId'
 import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media.$'
 
@@ -135,6 +139,18 @@ const AuthenticatedDashboardBotRoute =
     path: '/bot',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardBotFilesRoute =
+  AuthenticatedDashboardBotFilesRouteImport.update({
+    id: '/bot-files',
+    path: '/bot-files',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardBotOrdersRoute =
+  AuthenticatedDashboardBotOrdersRouteImport.update({
+    id: '/bot-orders',
+    path: '/bot-orders',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardConnectMt5Route =
   AuthenticatedDashboardConnectMt5RouteImport.update({
     id: '/connect-mt5',
@@ -177,6 +193,18 @@ const AuthenticatedDashboardSupportRoute =
     path: '/support',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardBotOrdersIndexRoute =
+  AuthenticatedDashboardBotOrdersIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardBotOrdersRoute,
+  } as any)
+const AuthenticatedDashboardBotOrdersOrderIdRoute =
+  AuthenticatedDashboardBotOrdersOrderIdRouteImport.update({
+    id: '/$orderId',
+    path: '/$orderId',
+    getParentRoute: () => AuthenticatedDashboardBotOrdersRoute,
+  } as any)
 const AuthenticatedDashboardPayPlanIdRoute =
   AuthenticatedDashboardPayPlanIdRouteImport.update({
     id: '/pay/$planId',
@@ -207,6 +235,8 @@ export interface FileRoutesByFullPath {
   '/get-bot-file/': typeof GetBotFileIndexRoute
   '/dashboard/account-management': typeof AuthenticatedDashboardAccountManagementRoute
   '/dashboard/bot': typeof AuthenticatedDashboardBotRoute
+  '/dashboard/bot-files': typeof AuthenticatedDashboardBotFilesRoute
+  '/dashboard/bot-orders': typeof AuthenticatedDashboardBotOrdersRouteWithChildren
   '/dashboard/connect-mt5': typeof AuthenticatedDashboardConnectMt5Route
   '/dashboard/mt5': typeof AuthenticatedDashboardMt5Route
   '/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
@@ -215,8 +245,10 @@ export interface FileRoutesByFullPath {
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/support': typeof AuthenticatedDashboardSupportRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/bot-orders/$orderId': typeof AuthenticatedDashboardBotOrdersOrderIdRoute
   '/dashboard/pay/$planId': typeof AuthenticatedDashboardPayPlanIdRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/dashboard/bot-orders/': typeof AuthenticatedDashboardBotOrdersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -234,6 +266,7 @@ export interface FileRoutesByTo {
   '/get-bot-file': typeof GetBotFileIndexRoute
   '/dashboard/account-management': typeof AuthenticatedDashboardAccountManagementRoute
   '/dashboard/bot': typeof AuthenticatedDashboardBotRoute
+  '/dashboard/bot-files': typeof AuthenticatedDashboardBotFilesRoute
   '/dashboard/connect-mt5': typeof AuthenticatedDashboardConnectMt5Route
   '/dashboard/mt5': typeof AuthenticatedDashboardMt5Route
   '/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
@@ -242,8 +275,10 @@ export interface FileRoutesByTo {
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/support': typeof AuthenticatedDashboardSupportRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/bot-orders/$orderId': typeof AuthenticatedDashboardBotOrdersOrderIdRoute
   '/dashboard/pay/$planId': typeof AuthenticatedDashboardPayPlanIdRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/dashboard/bot-orders': typeof AuthenticatedDashboardBotOrdersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -265,6 +300,8 @@ export interface FileRoutesById {
   '/get-bot-file/': typeof GetBotFileIndexRoute
   '/_authenticated/dashboard/account-management': typeof AuthenticatedDashboardAccountManagementRoute
   '/_authenticated/dashboard/bot': typeof AuthenticatedDashboardBotRoute
+  '/_authenticated/dashboard/bot-files': typeof AuthenticatedDashboardBotFilesRoute
+  '/_authenticated/dashboard/bot-orders': typeof AuthenticatedDashboardBotOrdersRouteWithChildren
   '/_authenticated/dashboard/connect-mt5': typeof AuthenticatedDashboardConnectMt5Route
   '/_authenticated/dashboard/mt5': typeof AuthenticatedDashboardMt5Route
   '/_authenticated/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
@@ -273,8 +310,10 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/_authenticated/dashboard/support': typeof AuthenticatedDashboardSupportRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/_authenticated/dashboard/bot-orders/$orderId': typeof AuthenticatedDashboardBotOrdersOrderIdRoute
   '/_authenticated/dashboard/pay/$planId': typeof AuthenticatedDashboardPayPlanIdRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
+  '/_authenticated/dashboard/bot-orders/': typeof AuthenticatedDashboardBotOrdersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -296,6 +335,8 @@ export interface FileRouteTypes {
     | '/get-bot-file/'
     | '/dashboard/account-management'
     | '/dashboard/bot'
+    | '/dashboard/bot-files'
+    | '/dashboard/bot-orders'
     | '/dashboard/connect-mt5'
     | '/dashboard/mt5'
     | '/dashboard/payments'
@@ -304,8 +345,10 @@ export interface FileRouteTypes {
     | '/dashboard/subscription'
     | '/dashboard/support'
     | '/dashboard/'
+    | '/dashboard/bot-orders/$orderId'
     | '/dashboard/pay/$planId'
     | '/api/public/media/$'
+    | '/dashboard/bot-orders/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -323,6 +366,7 @@ export interface FileRouteTypes {
     | '/get-bot-file'
     | '/dashboard/account-management'
     | '/dashboard/bot'
+    | '/dashboard/bot-files'
     | '/dashboard/connect-mt5'
     | '/dashboard/mt5'
     | '/dashboard/payments'
@@ -331,8 +375,10 @@ export interface FileRouteTypes {
     | '/dashboard/subscription'
     | '/dashboard/support'
     | '/dashboard'
+    | '/dashboard/bot-orders/$orderId'
     | '/dashboard/pay/$planId'
     | '/api/public/media/$'
+    | '/dashboard/bot-orders'
   id:
     | '__root__'
     | '/'
@@ -353,6 +399,8 @@ export interface FileRouteTypes {
     | '/get-bot-file/'
     | '/_authenticated/dashboard/account-management'
     | '/_authenticated/dashboard/bot'
+    | '/_authenticated/dashboard/bot-files'
+    | '/_authenticated/dashboard/bot-orders'
     | '/_authenticated/dashboard/connect-mt5'
     | '/_authenticated/dashboard/mt5'
     | '/_authenticated/dashboard/payments'
@@ -361,8 +409,10 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/subscription'
     | '/_authenticated/dashboard/support'
     | '/_authenticated/dashboard/'
+    | '/_authenticated/dashboard/bot-orders/$orderId'
     | '/_authenticated/dashboard/pay/$planId'
     | '/api/public/media/$'
+    | '/_authenticated/dashboard/bot-orders/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -515,6 +565,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardBotRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/bot-files': {
+      id: '/_authenticated/dashboard/bot-files'
+      path: '/bot-files'
+      fullPath: '/dashboard/bot-files'
+      preLoaderRoute: typeof AuthenticatedDashboardBotFilesRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/bot-orders': {
+      id: '/_authenticated/dashboard/bot-orders'
+      path: '/bot-orders'
+      fullPath: '/dashboard/bot-orders'
+      preLoaderRoute: typeof AuthenticatedDashboardBotOrdersRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/connect-mt5': {
       id: '/_authenticated/dashboard/connect-mt5'
       path: '/connect-mt5'
@@ -564,6 +628,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardSupportRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/bot-orders/': {
+      id: '/_authenticated/dashboard/bot-orders/'
+      path: '/'
+      fullPath: '/dashboard/bot-orders/'
+      preLoaderRoute: typeof AuthenticatedDashboardBotOrdersIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardBotOrdersRoute
+    }
+    '/_authenticated/dashboard/bot-orders/$orderId': {
+      id: '/_authenticated/dashboard/bot-orders/$orderId'
+      path: '/$orderId'
+      fullPath: '/dashboard/bot-orders/$orderId'
+      preLoaderRoute: typeof AuthenticatedDashboardBotOrdersOrderIdRouteImport
+      parentRoute: typeof AuthenticatedDashboardBotOrdersRoute
+    }
     '/_authenticated/dashboard/pay/$planId': {
       id: '/_authenticated/dashboard/pay/$planId'
       path: '/pay/$planId'
@@ -581,9 +659,29 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedDashboardBotOrdersRouteChildren {
+  AuthenticatedDashboardBotOrdersOrderIdRoute: typeof AuthenticatedDashboardBotOrdersOrderIdRoute
+  AuthenticatedDashboardBotOrdersIndexRoute: typeof AuthenticatedDashboardBotOrdersIndexRoute
+}
+
+const AuthenticatedDashboardBotOrdersRouteChildren: AuthenticatedDashboardBotOrdersRouteChildren =
+  {
+    AuthenticatedDashboardBotOrdersOrderIdRoute:
+      AuthenticatedDashboardBotOrdersOrderIdRoute,
+    AuthenticatedDashboardBotOrdersIndexRoute:
+      AuthenticatedDashboardBotOrdersIndexRoute,
+  }
+
+const AuthenticatedDashboardBotOrdersRouteWithChildren =
+  AuthenticatedDashboardBotOrdersRoute._addFileChildren(
+    AuthenticatedDashboardBotOrdersRouteChildren,
+  )
+
 interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardAccountManagementRoute: typeof AuthenticatedDashboardAccountManagementRoute
   AuthenticatedDashboardBotRoute: typeof AuthenticatedDashboardBotRoute
+  AuthenticatedDashboardBotFilesRoute: typeof AuthenticatedDashboardBotFilesRoute
+  AuthenticatedDashboardBotOrdersRoute: typeof AuthenticatedDashboardBotOrdersRouteWithChildren
   AuthenticatedDashboardConnectMt5Route: typeof AuthenticatedDashboardConnectMt5Route
   AuthenticatedDashboardMt5Route: typeof AuthenticatedDashboardMt5Route
   AuthenticatedDashboardPaymentsRoute: typeof AuthenticatedDashboardPaymentsRoute
@@ -600,6 +698,9 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardAccountManagementRoute:
       AuthenticatedDashboardAccountManagementRoute,
     AuthenticatedDashboardBotRoute: AuthenticatedDashboardBotRoute,
+    AuthenticatedDashboardBotFilesRoute: AuthenticatedDashboardBotFilesRoute,
+    AuthenticatedDashboardBotOrdersRoute:
+      AuthenticatedDashboardBotOrdersRouteWithChildren,
     AuthenticatedDashboardConnectMt5Route:
       AuthenticatedDashboardConnectMt5Route,
     AuthenticatedDashboardMt5Route: AuthenticatedDashboardMt5Route,

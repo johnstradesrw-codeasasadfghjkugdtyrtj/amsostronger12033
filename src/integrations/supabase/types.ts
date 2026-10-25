@@ -370,6 +370,45 @@ export type Database = {
         }
         Relationships: []
       }
+      bot_verified_payments: {
+        Row: {
+          amount: number
+          order_id: string
+          submission_id: string
+          verified_at: string
+          verified_by: string
+        }
+        Insert: {
+          amount: number
+          order_id: string
+          submission_id: string
+          verified_at?: string
+          verified_by: string
+        }
+        Update: {
+          amount?: number
+          order_id?: string
+          submission_id?: string
+          verified_at?: string
+          verified_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bot_verified_payments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "bot_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bot_verified_payments_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "bot_payment_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mt5_setup_requests: {
         Row: {
           account_number: string
@@ -755,6 +794,7 @@ export type Database = {
         Returns: undefined
       }
       registered_user_total: { Args: never; Returns: number }
+      reject_stale_bot_payments: { Args: never; Returns: number }
       reject_stale_payments: { Args: never; Returns: number }
       review_bot_order: {
         Args: { _order: string; _reason?: string; _status: string }

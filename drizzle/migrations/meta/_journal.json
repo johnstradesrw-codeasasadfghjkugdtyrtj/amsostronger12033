@@ -99,6 +99,13 @@
       "when": 1792958479588,
       "tag": "0013_forex_bot_marketplace",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1792958735164,
+      "tag": "0014_bot_payment_verification_and_timeout",
+      "breakpoints": true
     }
   ]
 }

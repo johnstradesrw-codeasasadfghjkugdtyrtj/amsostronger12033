@@ -106,6 +106,13 @@
       "when": 1792958735164,
       "tag": "0014_bot_payment_verification_and_timeout",
       "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1792961001252,
+      "tag": "0015_homepage_media_selection",
+      "breakpoints": true
     }
   ]
 }

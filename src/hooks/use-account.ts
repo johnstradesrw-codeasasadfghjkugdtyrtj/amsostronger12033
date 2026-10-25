@@ -29,6 +29,7 @@ export function useAccount() {
       };
     },
     staleTime: 30000,
+    refetchInterval: 15000,
   });
   return { ...account, isLoading: account.isLoading || entitlement.isLoading, data: account.data ? { ...account.data, entitlement: entitlement.data, active: entitlement.data?.allowed ? account.data.subscriptions.find(s => s.id === entitlement.data?.subscription_id) ?? null : null } : undefined };
 }

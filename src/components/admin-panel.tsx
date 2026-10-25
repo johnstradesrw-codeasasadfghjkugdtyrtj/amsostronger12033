@@ -54,6 +54,7 @@ export function Admin({ section = "payments" }: { section?: string }) {
         <TabsContent value="plans"><PlansAdmin /></TabsContent>
         <TabsContent value="methods"><MethodsAdmin uid={data.user.id} /></TabsContent>
         <TabsContent value="maintenance"><MaintenanceAdmin /></TabsContent>
+        <TabsContent value="media"><AdminMedia uid={data.user.id} /></TabsContent>
       </Tabs>
     </div>
   );
@@ -243,6 +244,59 @@ function MethodEditor({ m, uid }: { m: Tables<"payment_methods">; uid: string })
   );
 }
 
+
+function AdminMedia({ uid }: { uid: string }) {
+  const qc = useQueryClient();
+  const [uploading, setUploading] = useState(false);
+  const { data: files } = useQuery({
+    queryKey: ["admin-media"],
+    queryFn: async () => {
+      const { data, error } = await supabase.storage.from("site-media").list(uid, { limit: 100, sortBy: { column: "created_at", order: "desc" } });
+      if (error) throw error;
+      return (data ?? []).filter((f) => f.name !== ".emptyFolderPlaceholder");
+    },
+  });
+  const upload = async (file: File) => {
+    if (file.size > 50_000_000) { toast.error("File must be under 50MB"); return; }
+    setUploading(true);
+    const path = `${uid}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+    const { error } = await supabase.storage.from("site-media").upload(path, file);
+    setUploading(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Uploaded");
+    qc.invalidateQueries({ queryKey: ["admin-media"] });
+  };
+  const view = async (name: string) => {
+    const { data, error } = await supabase.storage.from("site-media").createSignedUrl(`${uid}/${name}`, 300);
+    if (error) { toast.error(error.message); return; }
+    window.open(data.signedUrl, "_blank");
+  };
+  const remove = async (name: string) => {
+    if (!confirm(`Delete ${name}?`)) return;
+    const { error } = await supabase.storage.from("site-media").remove([`${uid}/${name}`]);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Deleted");
+    qc.invalidateQueries({ queryKey: ["admin-media"] });
+  };
+  return (
+    <Card title="Site media">
+      <p className="mb-3 text-sm text-muted-foreground">Upload photos and videos (up to 50MB each). Only admins can add or remove files.</p>
+      <Input type="file" accept="image/*,video/*" className="max-w-xs" disabled={uploading} onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); e.target.value = ""; }} />
+      <div className="mt-4 divide-y divide-border">
+        {files?.length === 0 && <p className="py-3 text-sm text-muted-foreground">No files uploaded yet.</p>}
+        {files?.map((f) => (
+          <div key={f.name} className="flex items-center justify-between gap-3 py-3">
+            <p className="truncate text-sm font-medium">{f.name}</p>
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="outline" onClick={() => view(f.name)}>View</Button>
+              <Button size="sm" variant="destructive" onClick={() => remove(f.name)}>Delete</Button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Card>
+  );
+}
 
 function MaintenanceAdmin() {
   const qc = useQueryClient();

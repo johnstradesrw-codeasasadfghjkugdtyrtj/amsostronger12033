@@ -37,6 +37,7 @@ import { Route as AuthenticatedDashboardPlansRouteImport } from './routes/_authe
 import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard.profile'
 import { Route as AuthenticatedDashboardSubscriptionRouteImport } from './routes/_authenticated/dashboard.subscription'
 import { Route as AuthenticatedDashboardSupportRouteImport } from './routes/_authenticated/dashboard.support'
+import { Route as ApiPublicHomepageMediaRouteImport } from './routes/api/public/homepage-media'
 import { Route as AuthenticatedDashboardBotOrdersIndexRouteImport } from './routes/_authenticated/dashboard.bot-orders.index'
 import { Route as AuthenticatedDashboardBotOrdersOrderIdRouteImport } from './routes/_authenticated/dashboard.bot-orders.$orderId'
 import { Route as AuthenticatedDashboardPayPlanIdRouteImport } from './routes/_authenticated/dashboard.pay.$planId'
@@ -193,6 +194,11 @@ const AuthenticatedDashboardSupportRoute =
     path: '/support',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const ApiPublicHomepageMediaRoute = ApiPublicHomepageMediaRouteImport.update({
+  id: '/api/public/homepage-media',
+  path: '/api/public/homepage-media',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedDashboardBotOrdersIndexRoute =
   AuthenticatedDashboardBotOrdersIndexRouteImport.update({
     id: '/',
@@ -244,6 +250,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/support': typeof AuthenticatedDashboardSupportRoute
+  '/api/public/homepage-media': typeof ApiPublicHomepageMediaRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/bot-orders/$orderId': typeof AuthenticatedDashboardBotOrdersOrderIdRoute
   '/dashboard/pay/$planId': typeof AuthenticatedDashboardPayPlanIdRoute
@@ -274,6 +281,7 @@ export interface FileRoutesByTo {
   '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/dashboard/support': typeof AuthenticatedDashboardSupportRoute
+  '/api/public/homepage-media': typeof ApiPublicHomepageMediaRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/bot-orders/$orderId': typeof AuthenticatedDashboardBotOrdersOrderIdRoute
   '/dashboard/pay/$planId': typeof AuthenticatedDashboardPayPlanIdRoute
@@ -309,6 +317,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
   '/_authenticated/dashboard/subscription': typeof AuthenticatedDashboardSubscriptionRoute
   '/_authenticated/dashboard/support': typeof AuthenticatedDashboardSupportRoute
+  '/api/public/homepage-media': typeof ApiPublicHomepageMediaRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/bot-orders/$orderId': typeof AuthenticatedDashboardBotOrdersOrderIdRoute
   '/_authenticated/dashboard/pay/$planId': typeof AuthenticatedDashboardPayPlanIdRoute
@@ -344,6 +353,7 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/subscription'
     | '/dashboard/support'
+    | '/api/public/homepage-media'
     | '/dashboard/'
     | '/dashboard/bot-orders/$orderId'
     | '/dashboard/pay/$planId'
@@ -374,6 +384,7 @@ export interface FileRouteTypes {
     | '/dashboard/profile'
     | '/dashboard/subscription'
     | '/dashboard/support'
+    | '/api/public/homepage-media'
     | '/dashboard'
     | '/dashboard/bot-orders/$orderId'
     | '/dashboard/pay/$planId'
@@ -408,6 +419,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/profile'
     | '/_authenticated/dashboard/subscription'
     | '/_authenticated/dashboard/support'
+    | '/api/public/homepage-media'
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/bot-orders/$orderId'
     | '/_authenticated/dashboard/pay/$planId'
@@ -427,6 +439,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
+  ApiPublicHomepageMediaRoute: typeof ApiPublicHomepageMediaRoute
   ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
 }
 
@@ -628,6 +641,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardSupportRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/api/public/homepage-media': {
+      id: '/api/public/homepage-media'
+      path: '/api/public/homepage-media'
+      fullPath: '/api/public/homepage-media'
+      preLoaderRoute: typeof ApiPublicHomepageMediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/dashboard/bot-orders/': {
       id: '/_authenticated/dashboard/bot-orders/'
       path: '/'
@@ -760,6 +780,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
+  ApiPublicHomepageMediaRoute: ApiPublicHomepageMediaRoute,
   ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
 }
 export const routeTree = rootRouteImport

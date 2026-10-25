@@ -3,6 +3,7 @@ import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware';
 import { createClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { validBotFile, defaultAnnouncement } from './bot-rules';
+import { validThumbnail } from './media-rules';
 import type { Database } from '@/integrations/supabase/types';
 
 export const getBotCatalog = createServerFn({ method: 'GET' }).handler(async () => {
@@ -55,13 +56,52 @@ export const getBotAdmin = createServerFn({method:'POST'}).middleware([requireSu
   return {products:products.data??[],files:files.data??[],orders:(orders.data??[]).map(o=>({...o,email:profiles.data?.find(p=>p.id===o.user_id)?.email,submission:submissions.data?.find(s=>s.order_id===o.id)})),logs:logs.data??[],audit:audit.data??[],announcement:announcement.data??defaultAnnouncement};
 });
 const productSchema=z.object({id:z.string().uuid().optional(),name:z.string().trim().min(2).max(120),category:z.string().trim().min(1).max(80),platform:z.string().trim().min(1).max(40),price:z.number().positive().max(1000000),short_description:z.string().max(400),description:z.string().max(12000),instructions:z.string().max(12000),features:z.array(z.string().max(300)).max(40),instruments:z.array(z.string().max(100)).max(40),image_url:z.string().nullable(),published:z.boolean(),available:z.boolean(),requires_subscription:z.boolean(),download_limit:z.number().int().min(0).max(10000)});
-export const saveBotProduct=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).inputValidator((v:unknown)=>productSchema.parse(v)).handler(async({data,context})=>{
+export const saveBotProduct=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).inputValidator((v:unknown)=>{
+  if(!(v instanceof FormData)) throw new Error('Invalid listing submission.');
+  const product=productSchema.parse(JSON.parse(String(v.get('product'))));
+  const file=v.get('file');
+  return {product,file:file instanceof File&&file.size>0?file:null};
+}).handler(async({data,context})=>{
   const role=await context.supabase.rpc('has_role',{_user_id:context.userId,_role:'admin'});if(role.error||!role.data)throw new Error('Forbidden');
   const {supabaseAdmin:admin}=await import('@/integrations/supabase/client.server');
-  if(data.image_url && (!/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(data.image_url)||data.image_url.length>700000))throw new Error('Use a product image under 500KB.');
-  if(data.published){if(!data.id)throw new Error('Save a draft and upload its file before publishing.');const file=await admin.from('bot_file_metadata').select('product_id').eq('product_id',data.id).maybeSingle();if(!file.data)throw new Error('Upload a bot file before publishing.');}
-  const {id,...fields}=data;const r=id?await admin.from('bot_products').update(fields).eq('id',id).select('id').single():await admin.from('bot_products').insert(fields).select('id').single();
-  if(r.error)throw new Error('Unable to save product.');await admin.from('bot_audit').insert({actor:context.userId,action:'product_saved',details:{product:r.data.id,published:data.published}});return r.data;
+  const {id,...fields}=data.product;
+  if(fields.image_url){
+    if(!/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(fields.image_url)||fields.image_url.length>7_000_000) throw new Error('Use a JPG, PNG or WebP thumbnail up to 5 MB.');
+    const bytes=Uint8Array.from(atob(fields.image_url.split(',')[1]??''),c=>c.charCodeAt(0));
+    if(!validThumbnail(bytes)) throw new Error('Thumbnail must be a valid image up to 5 MB.');
+  }
+  const bytes=data.file?new Uint8Array(await data.file.arrayBuffer()):null;
+  if(data.file&&(!bytes||!validBotFile(data.file.name,bytes))) throw new Error('Upload a valid ZIP, PDF, MQ4 or MQ5 bot file, up to 20MB.');
+  if(fields.published&&!data.file){
+    const existing=id?await admin.from('bot_file_metadata').select('product_id').eq('product_id',id).maybeSingle():null;
+    if(!existing?.data) throw new Error('Attach a bot file before publishing.');
+  }
+  let productId=id;
+  if(!productId){
+    const draft=await admin.from('bot_products').insert({...fields,published:false}).select('id').single();
+    if(draft.error)throw new Error('Unable to create listing.');productId=draft.data.id;
+  }
+  let uploadedPath:string|null=null;
+  try{
+    if(data.file&&bytes){
+      uploadedPath=`${productId}/${crypto.randomUUID()}/${data.file.name}`;
+      const upload=await admin.storage.from('bot-files').upload(uploadedPath,bytes,{contentType:'application/octet-stream'});
+      if(upload.error)throw new Error('Bot file upload failed. Please try again.');
+      const metadata=await admin.from('bot_file_metadata').upsert({product_id:productId,path:uploadedPath,filename:data.file.name,size_bytes:data.file.size,content_type:data.file.type||'application/octet-stream'});
+      if(metadata.error)throw new Error('Unable to save bot file.');
+    }
+    const saved=await admin.from('bot_products').update(fields).eq('id',productId).eq('deleted',false).select('id').single();
+    if(saved.error)throw new Error('Unable to save listing.');
+    await admin.from('bot_audit').insert({actor:context.userId,action:'product_saved',details:{product:productId,published:fields.published,file_uploaded:!!data.file}});
+    return saved.data;
+  }catch(error){
+    if(!id){
+      await admin.from('bot_file_metadata').delete().eq('product_id',productId);
+      await admin.from('bot_products').delete().eq('id',productId).eq('published',false);
+      if(uploadedPath)await admin.storage.from('bot-files').remove([uploadedPath]);
+    }
+    throw error;
+  }
 });
 export const removeBotProduct=createServerFn({method:'POST'}).middleware([requireSupabaseAuth]).inputValidator((v:unknown)=>z.object({productId:z.string().uuid()}).parse(v)).handler(async({data,context})=>{
   const role=await context.supabase.rpc('has_role',{_user_id:context.userId,_role:'admin'});if(role.error||!role.data)throw new Error('Forbidden');const {supabaseAdmin:admin}=await import('@/integrations/supabase/client.server');

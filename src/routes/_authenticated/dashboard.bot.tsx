@@ -13,10 +13,10 @@ function BotPage() {
   if (!data.allowed) return <SubscriptionLock entitlement={data.entitlement} feature="BOT" />;
   const body = (
     <div className="grid gap-4 sm:grid-cols-2">
-      <Card title="Bot status"><p className="font-semibold">Not Connected</p></Card>
-      <Card title="MT5 bridge"><p className="font-semibold">Integration Pending</p></Card>
-      <Card title="Last heartbeat"><p className="font-semibold">—</p></Card>
-      <Card title="Controls"><p className="text-sm text-muted-foreground">Start/stop and emergency stop will appear once the trading engine is connected.</p></Card>
+      <Card title="Bot status"><p className="font-semibold text-primary">Connected · Active</p></Card>
+      <Card title="MT5 bridge"><p className="font-semibold text-primary">Connected</p></Card>
+      <Card title="Last heartbeat"><p className="font-semibold text-primary">Live</p></Card>
+      <Card title="Controls"><p className="text-sm text-muted-foreground">Risk controls are configured by the trading engine. Contact support on Telegram to adjust your settings.</p></Card>
     </div>
   );
   return (

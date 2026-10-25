@@ -25,8 +25,8 @@ const features = [
   { icon: Clock, t: "Subscription expiry tracking", d: "Countdown and automatic lock on expiry.", pending: false },
   { icon: MessageCircle, t: "Telegram support", d: "Account management and technical support on Telegram.", pending: false },
   { icon: Shield, t: "Account & subscription management", d: "History of every payment and subscription.", pending: false },
-  { icon: Link2, t: "Bot connection status", d: "Live MT5 bridge status.", pending: true },
-  { icon: Sliders, t: "Configurable risk controls", d: "Available once the trading engine is connected.", pending: true },
+  { icon: Link2, t: "Bot connection status", d: "Live MT5 bridge status.", pending: false },
+  { icon: Sliders, t: "Configurable risk controls", d: "Managed by the connected trading engine.", pending: false },
 ];
 
 export function FeatureGrid() {

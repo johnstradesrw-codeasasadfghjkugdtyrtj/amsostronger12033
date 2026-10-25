@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { TrendingUp } from 'lucide-react';
+import { TrendingUp, Server, Cpu } from 'lucide-react';
 
 const REPORTED_PROFIT = 6_872_393;
+const PROFIT_PER_MINUTE = 17;
 
 function useCountUp(target: number, durationMs = 2200) {
   const [value, setValue] = useState(0);
@@ -23,8 +24,48 @@ function useCountUp(target: number, durationMs = 2200) {
   return value;
 }
 
+/** After the count-up finishes, keep the figure ticking up by PROFIT_PER_MINUTE. */
+function useLiveProfit() {
+  const base = useCountUp(REPORTED_PROFIT);
+  const [extra, setExtra] = useState(0);
+  const done = base >= REPORTED_PROFIT;
+  useEffect(() => {
+    if (!done) return;
+    const id = setInterval(() => setExtra((e) => e + PROFIT_PER_MINUTE), 60_000);
+    return () => clearInterval(id);
+  }, [done]);
+  return base + extra;
+}
+
+function SignalBars() {
+  return (
+    <span className="flex items-end gap-0.5" aria-hidden="true">
+      {[0, 1, 2].map((i) => (
+        <span
+          key={i}
+          className="w-1 rounded-sm bg-primary animate-pulse"
+          style={{ height: `${6 + i * 4}px`, animationDelay: `${i * 200}ms` }}
+        />
+      ))}
+    </span>
+  );
+}
+
+function GreenLight({ label }: { label: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="relative flex h-2.5 w-2.5">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary" />
+      </span>
+      <SignalBars />
+      <span className="font-semibold text-primary">{label}</span>
+    </div>
+  );
+}
+
 export function PlatformStatus() {
-  const profit = useCountUp(REPORTED_PROFIT);
+  const profit = useLiveProfit();
   return (
     <section aria-label="Platform overview" className="border-y bg-secondary/40">
       <div className="mx-auto max-w-7xl px-5 py-10">
@@ -58,6 +99,14 @@ export function PlatformStatus() {
               <dt className="text-xs text-muted-foreground">Owner-reported pair</dt>
               <dd className="mt-2 font-display text-xl font-bold">GOLD / XAUUSD</dd>
               <dd className="mt-1 text-xs text-muted-foreground">Activity not independently verified</dd>
+            </div>
+            <div>
+              <dt className="flex items-center gap-1.5 text-xs text-muted-foreground"><Server className="h-3.5 w-3.5" />Server connection</dt>
+              <dd className="mt-2"><GreenLight label="Online" /></dd>
+            </div>
+            <div>
+              <dt className="flex items-center gap-1.5 text-xs text-muted-foreground"><Cpu className="h-3.5 w-3.5" />VPS</dt>
+              <dd className="mt-2"><GreenLight label="Running" /></dd>
             </div>
           </dl>
         </div>

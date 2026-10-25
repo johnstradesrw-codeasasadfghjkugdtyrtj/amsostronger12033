@@ -6,6 +6,7 @@ import { Logo } from "@/components/site-chrome";
 import { useAccount } from "@/hooks/use-account";
 import { ACCOUNT_MGMT_URL, SUPPORT_URL } from "@/lib/site";
 import { Button } from '@/components/ui/button';
+import { WelcomeTrial } from '@/components/welcome-trial';
 import { pageHead } from '@/lib/metadata';
 
 export const Route = createFileRoute("/_authenticated/dashboard")({

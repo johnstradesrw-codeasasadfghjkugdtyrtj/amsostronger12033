@@ -6,7 +6,7 @@ import { validBotFile, defaultAnnouncement } from './bot-rules';
 import type { Database } from '@/integrations/supabase/types';
 
 export const getBotCatalog = createServerFn({ method: 'GET' }).handler(async () => {
-  const url = process.env['SUPABASE_URL'] || import.meta.env.VITE_SUPABASE_URL; const key = process.env['SUPABASE_PUBLISHABLE_KEY'] || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  const url = process.env['SUPABASE_URL'] || import.meta.env['VITE_SUPABASE_URL']; const key = process.env['SUPABASE_PUBLISHABLE_KEY'] || import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'];
   if (!url || !key) { console.error('Marketplace env missing'); return { products: [], announcement: defaultAnnouncement }; }
   const client = createClient<Database>(url,key,{ auth:{persistSession:false,autoRefreshToken:false},global:{fetch:(input,init)=>{const h=new Headers(init?.headers); if(key.startsWith('sb_') && h.get('Authorization')===`Bearer ${key}`) h.delete('Authorization');h.set('apikey',key);return fetch(input,{...init,headers:h});}} });
   const [products,announcement] = await Promise.all([client.from('bot_products').select('*').eq('published',true).eq('deleted',false).order('created_at',{ascending:false}),client.from('bot_announcement').select('*').maybeSingle()]);

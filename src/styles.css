@@ -40,6 +40,8 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-editorial: var(--editorial);
+  --color-editorial-soft: var(--editorial-soft);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
@@ -77,6 +79,9 @@
   --secondary-foreground: var(--foreground);
   --muted: oklch(0.93 0.012 90);
   --muted-foreground: oklch(0.48 0.025 155);
+  --editorial: oklch(0.49 0.10 38);
+  --editorial-soft: oklch(0.94 0.025 38);
+  --shadow-editorial: 0 12px 32px -18px color-mix(in oklab, var(--foreground) 30%, transparent);
   --accent: oklch(0.48 0.055 85);
   --accent-foreground: var(--primary-foreground);
   --destructive: oklch(0.52 0.16 25);

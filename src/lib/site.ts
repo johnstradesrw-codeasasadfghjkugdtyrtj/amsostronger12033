@@ -4,6 +4,8 @@ export const telegramLink = (message: string) =>
   `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
 export const SUPPORT_URL = telegramLink("Hello QMAM team, I need help with my account.");
 export const ACCOUNT_MGMT_URL = SUPPORT_URL;
+export const SUPPORT_EMAIL = "qmam.site@gmail.com";
+export const SUPPORT_EMAIL_URL = `mailto:${SUPPORT_EMAIL}`;
 export const forgotPasswordLink = (email?: string) =>
   telegramLink(`Hello, my email is ${email?.trim() || "[your email]"}. Please help me change my password.`);
 export const ADMIN_EMAILS = ["dufashwenayo@gmail.com", "eclifunded@gmail.com"] as const;

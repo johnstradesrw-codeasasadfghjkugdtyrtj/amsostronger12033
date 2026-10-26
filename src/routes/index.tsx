@@ -14,6 +14,7 @@ import proof3 from "@/assets/bot-proof-image-3.jpg.asset.json";
 import proof4 from "@/assets/bot-proof-image-4.jpg.asset.json";
 import { PlatformStatus } from '@/components/platform-status';
 import { BROKERS } from '@/lib/brokers';
+import { HomepageMedia } from '@/components/homepage-media';
 import { BotHomepage } from '@/components/bot-marketplace';
 
 export const Route = createFileRoute("/")({
@@ -25,8 +26,6 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "MT5-focused automated trading platform with subscription access." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:image", content: HERO_IMAGE },
-      { name: "twitter:image", content: HERO_IMAGE },
     ],
   }),
   component: Index,
@@ -62,11 +61,11 @@ function HeroReel() {
   };
 
   return (
-    <div className="relative mx-auto w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[350px]">
-      <div aria-hidden className="absolute -right-5 -top-5 -z-10 hidden h-full w-full rounded-[2.4rem] border border-primary/30 sm:block" />
+    <div className="relative mx-auto w-full max-w-[160px] sm:max-w-[264px] lg:max-w-[280px]">
+      <div aria-hidden className="absolute -right-5 -top-5 -z-10 hidden h-full w-full rounded-lg border border-editorial/30 sm:block" />
 
-      <div className="animate-qmam-float relative rounded-[2.3rem] border border-primary/40 bg-primary p-1.5 shadow-[var(--shadow-glow)]">
-        <div className="relative overflow-hidden rounded-[1.9rem] bg-card">
+      <div className="animate-qmam-float relative rounded-lg border border-primary/40 bg-primary p-1.5 shadow-[var(--shadow-glow)]">
+        <div className="relative overflow-hidden rounded-md bg-card">
           <div className="flex items-center justify-between gap-2 bg-primary px-4 py-2.5">
             <span className="font-display text-[10px] font-bold uppercase tracking-[0.22em] text-primary-foreground">
               QMAM
@@ -100,28 +99,32 @@ function HeroReel() {
           </video>
 
           <div className="flex items-center gap-3 bg-primary px-4 py-3">
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon"
               onClick={togglePlay}
               aria-label={paused ? "Play video" : "Pause video"}
               className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-foreground/15 text-primary-foreground transition hover:bg-primary-foreground/25"
             >
               {paused ? <Play className="h-3.5 w-3.5" /> : <Pause className="h-3.5 w-3.5" />}
-            </button>
+            </Button>
             <div className="h-1 flex-1 overflow-hidden rounded-full bg-primary-foreground/25">
               <div
                 className="h-full rounded-full bg-primary-foreground transition-[width] duration-300"
                 style={{ width: `${Math.round(progress * 100)}%` }}
               />
             </div>
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon"
               onClick={toggleSound}
               aria-label={muted ? "Turn sound on" : "Turn sound off"}
               className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-foreground/15 text-primary-foreground transition hover:bg-primary-foreground/25"
             >
               {muted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -310,13 +313,13 @@ function ConnectMt5Cta() {
 function Index() {
   return (
     <PublicLayout>
-      <section className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 lg:grid-cols-2 lg:py-24">
+      <section className="mx-auto grid max-w-7xl items-center gap-6 px-4 py-4 sm:gap-10 sm:py-10 lg:grid-cols-[1.2fr_0.8fr] lg:py-12">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary">Matrix Quantum MT5</p>
-          <h1 className="mt-4 bg-[image:var(--gradient-brand)] bg-clip-text font-display text-4xl font-bold leading-tight text-transparent sm:text-6xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-editorial">Matrix Quantum MT5</p>
+          <h1 className="mt-4 font-display text-3xl font-bold leading-tight text-primary sm:text-5xl">
             Quantum Multi Assets Matrix
           </h1>
-          <p className="mt-5 max-w-xl text-lg text-muted-foreground">
+          <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
             Explore the platform, and discover tools designed for your MT5 trading workflow.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -326,7 +329,7 @@ function Index() {
             <Button size="lg" variant="secondary" asChild><a href={ACCOUNT_MGMT_URL} target="_blank" rel="noreferrer">Account Management — Click Here</a></Button>
           </div>
         </div>
-        <HeroReel />
+        <HomepageMedia><HeroReel /></HomepageMedia>
       </section>
 
       <PlatformStatus />

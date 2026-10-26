@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import { Menu, X, Link2 } from "lucide-react";
+import { Menu, X, Link2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
-import { ACCOUNT_MGMT_URL, SUPPORT_URL } from "@/lib/site";
+import { ACCOUNT_MGMT_URL, SUPPORT_URL, SUPPORT_EMAIL, SUPPORT_EMAIL_URL } from "@/lib/site";
 
 export function Logo() {
   return (
@@ -91,9 +91,10 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl space-y-6 px-4 py-10">
         <div className="flex flex-col justify-between gap-6 sm:flex-row">
           <Logo />
-          <div className="flex flex-wrap gap-4 text-sm">
+          <div className="flex flex-wrap items-center gap-4 text-sm">
             <a href={ACCOUNT_MGMT_URL} target="_blank" rel="noreferrer" className="text-primary">Account Management — Click Here</a>
             <a href={SUPPORT_URL} target="_blank" rel="noreferrer" className="text-primary">Contact Support on Telegram</a>
+            <a href={SUPPORT_EMAIL_URL} className="inline-flex items-center gap-2 text-editorial"><Mail className="h-4 w-4" />{SUPPORT_EMAIL}</a>
           </div>
         </div>
         <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Quantum Multi Assets Matrix · Matrix Quantum MT5 · Botorian Dev Forex</p>

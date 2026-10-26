@@ -19,3 +19,6 @@
 - Public membership metrics expose aggregate counts only; never fabricate growth or connection telemetry. Why: preserve privacy and truthful activity reporting.
 - Bot marketplace orders, payments, entitlements and audit are independent of subscription tables; authenticated SQL RPCs snapshot prices and review payments, while server functions reauthorize private downloads and admin operations. Why: one-time file purchases cannot confer subscription access or leak paid assets.
 - Validate bot uploads by content as ZIP, PDF or MQL source; distribute compiled EX4/EX5 inside ZIP, never pretend their undocumented binary formats are validated. Why: filenames and browser MIME types are not evidence of actual file type.
+
+- Homepage replacements use an admin-authorized selection and a same-origin public endpoint exposing only the selected file; original bundled media is the fallback. Why: private uploads remain private until explicitly selected.
+- Bot listing creation submits product fields and the private file together through the authorized save handler. Why: publishing cannot succeed without a validated downloadable file.

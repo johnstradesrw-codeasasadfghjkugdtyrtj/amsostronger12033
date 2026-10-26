@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { selectHomepageMedia } from "@/lib/homepage-media.functions";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
@@ -251,6 +253,25 @@ function MethodEditor({ m, uid }: { m: Tables<"payment_methods">; uid: string })
 function AdminMedia({ uid }: { uid: string }) {
   const qc = useQueryClient();
   const [uploading, setUploading] = useState(false);
+  const [selecting, setSelecting] = useState(false);
+  const select = useServerFn(selectHomepageMedia);
+  const { data: selection } = useQuery({
+    queryKey: ["homepage-media-selection"],
+    queryFn: async () => {
+      const result = await supabase.from("homepage_media_settings").select("path,media_type,updated_at").eq("id", true).maybeSingle();
+      if (result.error) throw result.error;
+      return result.data;
+    },
+  });
+  const changeHomepage = async (path: string | null) => {
+    setSelecting(true);
+    try {
+      await select({ data: { path } });
+      await qc.invalidateQueries({ queryKey: ["homepage-media-selection"] });
+      toast.success(path ? "Homepage photo / video updated." : "Original homepage video restored.");
+    } catch (error) { toast.error((error as Error).message); }
+    finally { setSelecting(false); }
+  };
   const { data: files } = useQuery({
     queryKey: ["admin-media"],
     queryFn: async () => {
@@ -276,21 +297,27 @@ function AdminMedia({ uid }: { uid: string }) {
   };
   const remove = async (name: string) => {
     if (!confirm(`Delete ${name}?`)) return;
+    if (selection?.path === `${uid}/${name}`) {
+      toast.error("Restore the original video or select another file before deleting the homepage media.");
+      return;
+    }
     const { error } = await supabase.storage.from("site-media").remove([`${uid}/${name}`]);
     if (error) { toast.error(error.message); return; }
     toast.success("Deleted");
     qc.invalidateQueries({ queryKey: ["admin-media"] });
   };
   return (
-    <Card title="Site media">
+    <Card title="Homepage photo & video">
       <p className="mb-3 text-sm text-muted-foreground">Upload photos and videos (up to 50MB each). Only admins can add or remove files.</p>
-      <Input type="file" accept="image/*,video/*" className="max-w-xs" disabled={uploading} onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); e.target.value = ""; }} />
+      <div className="mb-5 flex flex-wrap items-center gap-3"><Badge variant="outline">{selection ? "Custom homepage media" : "Original homepage video"}</Badge>{selection && <Button variant="outline" size="sm" disabled={selecting} onClick={() => changeHomepage(null)}>Restore original video</Button>}</div>
+      <Input aria-label="Upload homepage photo or video" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" className="max-w-md" disabled={uploading} onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); e.target.value = ""; }} />
       <div className="mt-4 divide-y divide-border">
         {files?.length === 0 && <p className="py-3 text-sm text-muted-foreground">No files uploaded yet.</p>}
         {files?.map((f) => (
-          <div key={f.name} className="flex items-center justify-between gap-3 py-3">
-            <p className="truncate text-sm font-medium">{f.name}</p>
+          <div key={f.name} className="flex flex-wrap items-center justify-between gap-3 py-3">
+            <p className="min-w-0 flex-1 break-all text-sm font-medium">{f.name}</p>
             <div className="flex items-center gap-2">
+              <Button size="sm" disabled={selecting || selection?.path === `${uid}/${f.name}`} onClick={() => changeHomepage(`${uid}/${f.name}`)}>{selection?.path === `${uid}/${f.name}` ? "On homepage" : "Use on homepage"}</Button>
               <Button size="sm" variant="outline" onClick={() => view(f.name)}>View</Button>
               <Button size="sm" variant="destructive" onClick={() => remove(f.name)}>Delete</Button>
             </div>
@@ -320,7 +347,7 @@ function MaintenanceAdmin() {
         {MANAGED_PAGES.map((p) => {
           const on = pages?.find((x) => x.path === p.path)?.enabled ?? true;
           return (
-            <div key={p.path} className="flex items-center justify-between gap-3 py-3">
+            <div key={p.path} className="flex flex-wrap items-center justify-between gap-3 py-3">
               <div><p className="font-medium">{p.label}</p><p className="font-mono text-xs text-muted-foreground">{p.path}</p></div>
               <div className="flex items-center gap-3">
                 <Badge variant={on ? "default" : "destructive"}>{on ? "Live" : "Maintenance"}</Badge>

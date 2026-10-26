@@ -10,9 +10,9 @@ export const Route = createFileRoute("/reset-password")({
   head: () => ({
     meta: [
       { title: "Set new password — Quantum Multi Assets Matrix" },
-      { name: "description", content: "Choose a new password for your account." },
-      { property: "og:title", content: "Set new password" },
-      { property: "og:description", content: "Choose a new password for your account." },
+      { name: "description", content: "Choose a new password for your Quantum Multi Assets Matrix account." },
+      { property: "og:title", content: "Set new password — Quantum Multi Assets Matrix" },
+      { property: "og:description", content: "Choose a new password for your Quantum Multi Assets Matrix account." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],

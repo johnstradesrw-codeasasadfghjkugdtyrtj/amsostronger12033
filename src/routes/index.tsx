@@ -313,7 +313,7 @@ function ConnectMt5Cta() {
 function Index() {
   return (
     <PublicLayout>
-      <section className="mx-auto grid max-w-7xl items-center gap-6 px-4 py-6 sm:gap-10 sm:py-10 lg:grid-cols-[1.2fr_0.8fr] lg:py-12">
+      <section className="mx-auto grid max-w-7xl items-center gap-6 px-4 py-4 sm:gap-10 sm:py-10 lg:grid-cols-[1.2fr_0.8fr] lg:py-12">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-editorial">Matrix Quantum MT5</p>
           <h1 className="mt-4 font-display text-3xl font-bold leading-tight text-primary sm:text-5xl">

@@ -1,0 +1,1 @@
+CREATE POLICY "Public reads selected homepage media only" ON storage.objects FOR SELECT TO anon, authenticated USING (bucket_id = 'site-media' AND EXISTS (SELECT 1 FROM public.homepage_media_settings h WHERE h.id = true AND h.path = name));

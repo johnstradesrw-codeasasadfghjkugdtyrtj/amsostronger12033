@@ -26,8 +26,6 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: "MT5-focused automated trading platform with subscription access." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:image", content: HERO_IMAGE },
-      { name: "twitter:image", content: HERO_IMAGE },
     ],
   }),
   component: Index,
@@ -63,7 +61,7 @@ function HeroReel() {
   };
 
   return (
-    <div className="relative mx-auto w-full max-w-[244px] sm:max-w-[264px] lg:max-w-[280px]">
+    <div className="relative mx-auto w-full max-w-[160px] sm:max-w-[264px] lg:max-w-[280px]">
       <div aria-hidden className="absolute -right-5 -top-5 -z-10 hidden h-full w-full rounded-lg border border-editorial/30 sm:block" />
 
       <div className="animate-qmam-float relative rounded-lg border border-primary/40 bg-primary p-1.5 shadow-[var(--shadow-glow)]">
@@ -315,13 +313,13 @@ function ConnectMt5Cta() {
 function Index() {
   return (
     <PublicLayout>
-      <section className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-10 lg:grid-cols-[1.2fr_0.8fr] lg:py-12">
+      <section className="mx-auto grid max-w-7xl items-center gap-6 px-4 py-6 sm:gap-10 sm:py-10 lg:grid-cols-[1.2fr_0.8fr] lg:py-12">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-editorial">Matrix Quantum MT5</p>
-          <h1 className="mt-4 font-display text-4xl font-bold leading-tight text-primary sm:text-5xl">
+          <h1 className="mt-4 font-display text-3xl font-bold leading-tight text-primary sm:text-5xl">
             Quantum Multi Assets Matrix
           </h1>
-          <p className="mt-5 max-w-xl text-lg text-muted-foreground">
+          <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
             Explore the platform, and discover tools designed for your MT5 trading workflow.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">

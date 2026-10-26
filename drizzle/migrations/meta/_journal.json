@@ -113,6 +113,13 @@
       "when": 1792961001252,
       "tag": "0015_homepage_media_selection",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1792991876344,
+      "tag": "0016_selected_homepage_media_public_delivery",
+      "breakpoints": true
     }
   ]
 }

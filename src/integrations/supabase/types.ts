@@ -796,10 +796,29 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_remove_bot_product: {
+        Args: { _product: string }
+        Returns: undefined
+      }
+      admin_save_bot_announcement: {
+        Args: {
+          _destination: string
+          _enabled: boolean
+          _heading: string
+          _message: string
+        }
+        Returns: undefined
+      }
+      admin_save_bot_product: {
+        Args: { _fields: Json; _file?: Json; _id: string }
+        Returns: string
+      }
       authorize_bot_download: {
         Args: { _order: string; _user: string }
         Returns: Json
       }
+      can_read_bot_file: { Args: { _path: string }; Returns: boolean }
+      cancel_bot_order: { Args: { _order: string }; Returns: undefined }
       create_bot_order: { Args: { _product: string }; Returns: string }
       has_active_subscription: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
@@ -817,6 +836,7 @@ export type Database = {
       registered_user_total: { Args: never; Returns: number }
       reject_stale_bot_payments: { Args: never; Returns: number }
       reject_stale_payments: { Args: never; Returns: number }
+      request_bot_download: { Args: { _order: string }; Returns: Json }
       review_bot_order: {
         Args: { _order: string; _reason?: string; _status: string }
         Returns: undefined
